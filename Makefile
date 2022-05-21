@@ -1,6 +1,7 @@
 CFLAGS := -ansi -Wall -Wextra -Werror -pedantic -pedantic-errors
+TARGET_LIB_LDFLAGS := $(LDFLAGS) -shared
 
-TARGET_LIBS := libynot_c_ds.so
+TARGET_LIBS := libynot_c_ds
 CHECK_BINS := list_check
 CHECK_SRC := $(filter %_check.c, $(wildcard *.c))
 SRC := $(filter-out %_check.c, $(wildcard *.c))
@@ -37,4 +38,4 @@ include $(CHECK_SRC:.c=.d)
 $(CHECK_BINS): $(OBJS) $(CHECK_OBJS)
 
 $(TARGET_LIBS): $(OBJS)
-	$(CC) $(LDFLAGS) -shared -o  $@ $^ $(LOADLIBES) $(LDLIBS)
+	$(CC) $(TARGET_LIB_LDFLAGS) -o  $@ $^ $(LOADLIBES) $(LDLIBS)
