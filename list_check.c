@@ -137,7 +137,6 @@ void test_list_start()
 	assert((list_start(l))->data == &start_data);
 }
 
-
 int main()
 {
 	test_list_append();
