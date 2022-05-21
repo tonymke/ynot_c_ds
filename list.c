@@ -31,6 +31,17 @@ struct list *list_append(struct list *l, void *data)
 	return l->next;
 }
 
+struct list *list_end(struct list *l)
+{
+	if (l == NULL)
+		return l;
+
+	while (l != NULL && l->next != NULL)
+		l = l->next;
+
+	return l;
+}
+
 void list_free_full(struct list *l, void (*data_free)(void *data))
 {
 	struct list *buf, *left_entry;
@@ -102,7 +113,10 @@ struct list *list_prepend(struct list *l, void *data)
 
 struct list *list_start(struct list *l)
 {
-	while (l != NULL && l->prev != NULL)
+	if (l == NULL)
+		return NULL;
+
+	while (l->prev != NULL)
 		l = l->prev;
 
 	return l;
