@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <stdlib.h>
 
 #include "list.h"
@@ -34,9 +33,9 @@ struct list *list_append(struct list *l, void *data)
 struct list *list_end(struct list *l)
 {
 	if (l == NULL)
-		return l;
+		return NULL;
 
-	while (l != NULL && l->next != NULL)
+	while (l->next != NULL)
 		l = l->next;
 
 	return l;
@@ -62,7 +61,6 @@ void list_free_full(struct list *l, void (*data_free)(void *data))
 	while (l != NULL) {
 		if (data_free != NULL)
 			data_free(l->data);
-
 		buf = l;
 		l = l->prev;
 		free(buf);
@@ -107,6 +105,24 @@ struct list *list_insert(struct list *l, void *data, size_t i)
 		new->prev->next = new;
 
 	return new;
+}
+
+void *list_pop(struct list *l)
+{
+	void *data;
+
+	if (l == NULL)
+		return NULL;
+
+	l = list_end(l);
+	data = l->data;
+
+	if (l->prev != NULL)
+		l->prev->next = NULL;
+
+	free(l);
+
+	return data;
 }
 
 struct list *list_prepend(struct list *l, void *data)

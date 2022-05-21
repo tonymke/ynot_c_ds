@@ -42,6 +42,7 @@ void test_list_end()
 	start = l = list_append(l, &other_data);
 	for (i = 0; i < 4; i++) {
 		l = list_append(l, &other_data);
+		assert(list_end(start) == l);
 	}
 	l = list_append(l, &end_data);
 	assert((list_end(l))->data == &end_data);
@@ -133,6 +134,29 @@ void test_list_prepend()
 	list_free(l);
 }
 
+void test_list_pop()
+{
+	struct list *l, *start;
+	int end_data, other_data;
+
+	end_data = 1234;
+	other_data = 5678;
+	l = NULL;
+
+	assert(list_pop(l) == NULL);
+
+	start = l = list_append(l, &other_data);
+	l = list_append(l, &other_data);
+	l = list_append(l, &end_data);
+
+	assert(list_len(start) == 3);
+	assert(list_pop(start) == &end_data);
+	assert(list_len(start) == 2);
+	assert(list_pop(start) == &other_data);
+	assert(list_len(start) == 1);
+	assert(list_pop(start) == &other_data);
+}
+
 void test_list_start()
 {
 	struct list *l;
@@ -162,7 +186,9 @@ int main()
 	test_list_insert();
 	test_list_len();
 	test_list_lifecycle();
+	test_list_pop();
 	test_list_prepend();
 	test_list_start();
-	return 0;
+
+	return EXIT_SUCCESS;
 }
