@@ -99,3 +99,11 @@ struct list *list_prepend(struct list *l, void *data)
 
 	return l->prev;
 }
+
+struct list *list_start(struct list *l)
+{
+	while (l != NULL && l->prev != NULL)
+		l = l->prev;
+
+	return l;
+}

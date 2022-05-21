@@ -18,4 +18,6 @@ struct list *list_append(struct list *l, void *data);
 struct list *list_insert(struct list *l, void *data, size_t i);
 struct list *list_prepend(struct list *l, void *data);
 
+struct list *list_start(struct list *l);
+
 #endif /* YNOT_C_DS_LIST_H */

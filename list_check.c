@@ -92,6 +92,27 @@ void test_list_prepend()
 	list_free(l);
 }
 
+void test_list_start()
+{
+	struct list *l;
+	size_t i;
+	int start_data, other_data;
+
+	l = NULL;
+	start_data = 1234;
+	other_data = 5678;
+
+	assert(list_start(l) == NULL);
+
+	l = list_append(NULL, &start_data);
+	assert((list_start(l))->data == &start_data);
+	for (i = 0; i < 5; i++) {
+		l = list_append(l, &other_data);
+	}
+
+	assert((list_start(l))->data == &start_data);
+}
+
 
 int main()
 {
@@ -99,5 +120,6 @@ int main()
 	test_list_insert();
 	test_list_lifecycle();
 	test_list_prepend();
+	test_list_start();
 	return 0;
 }
