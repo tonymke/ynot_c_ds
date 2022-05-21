@@ -82,6 +82,23 @@ void test_list_insert()
 	list_free(a);
 }
 
+void test_list_len() {
+	struct list *start, *mid, *end;
+
+	assert(list_len(NULL) == 0);
+	start = list_append(NULL, NULL);
+	assert(list_len(start) == 1);
+
+	mid = list_append(start, NULL);
+	assert(list_len(start) == 2);
+	assert(list_len(mid) == 2);
+	end = list_append(mid, NULL);
+
+	assert(list_len(start) == 3);
+	assert(list_len(end) == 3);
+	assert(list_len(mid) == 3);
+}
+
 void test_list_lifecycle()
 {
 	struct list *l;
@@ -135,6 +152,7 @@ void test_list_start()
 	}
 
 	assert((list_start(l))->data == &start_data);
+	list_free(l);
 }
 
 int main()
@@ -142,6 +160,7 @@ int main()
 	test_list_append();
 	test_list_end();
 	test_list_insert();
+	test_list_len();
 	test_list_lifecycle();
 	test_list_prepend();
 	test_list_start();

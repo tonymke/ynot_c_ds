@@ -46,7 +46,6 @@ void list_free_full(struct list *l, void (*data_free)(void *data))
 {
 	struct list *buf, *left_entry;
 	if (l == NULL)
-
 		return;
 
 	left_entry = l->prev;
@@ -68,6 +67,23 @@ void list_free_full(struct list *l, void (*data_free)(void *data))
 		l = l->prev;
 		free(buf);
 	}
+}
+
+size_t list_len(struct list *l)
+{
+	size_t n;
+	struct list *left_buf;
+	if (l == NULL)
+		return 0;
+
+	l = list_start(l);
+	left_buf = l->prev;
+	for (n = 0; l != NULL; n++, l = l->next) {
+	}
+	for(l = left_buf; l != NULL; n++, l = l->prev) {
+	}
+
+	return n;
 }
 
 struct list *list_insert(struct list *l, void *data, size_t i)
