@@ -15,14 +15,13 @@ struct list* list_alloc()
 
 struct list *list_append(struct list *l, void *data)
 {
+	l = list_end(l);
+
 	if (l == NULL) {
 		l = list_alloc();
 		l->data = data;
 		return l;
 	}
-
-	while (l->next != NULL)
-		l = l->next;
 
 	l->next = list_alloc();
 	l->next->prev = l;
@@ -127,14 +126,12 @@ void *list_pop(struct list *l)
 
 struct list *list_prepend(struct list *l, void *data)
 {
+	l = list_start(l);
 	if (l == NULL) {
 		l = list_alloc();
 		l->data = data;
 		return l;
 	}
-
-	while (l->prev != NULL)
-		l = l->prev;
 
 	l->prev = list_alloc();
 	l->prev->next = l;
