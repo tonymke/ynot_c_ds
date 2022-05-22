@@ -25,6 +25,30 @@ void test_list_append()
 	list_free(l);
 }
 
+void test_list_delete()
+{
+	struct list *a, *b, *c;
+	int a_data, b_data, c_data;
+
+	assert(list_delete(NULL) == NULL);
+	assert(list_delete(list_alloc()) == NULL);
+
+	a_data = 1;
+	b_data = 2;
+	c_data = 3;
+
+	a = list_append(NULL, &a_data);
+	b = list_append(a, &b_data);
+	c = list_append(b, &c_data);
+
+	assert(list_delete(b) == a);
+	assert(a->next == c);
+	assert(list_len(a) == 2);
+
+	assert(list_delete(a) == c);
+	assert(list_len(c) == 1);
+}
+
 void test_list_end()
 {
 	struct list *l, *start;
@@ -203,6 +227,7 @@ void test_list_start()
 int main()
 {
 	test_list_append();
+	test_list_delete();
 	test_list_end();
 	test_list_insert();
 	test_list_len();

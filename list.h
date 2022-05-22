@@ -22,6 +22,7 @@ struct list *list_append(struct list *l, void *data);
 struct list *list_insert(struct list *l, void *data, size_t i);
 struct list *list_prepend(struct list *l, void *data);
 
+struct list *list_delete(struct list *l);
 void *list_pop(struct list *l);
 void *list_pop_left(struct list *l);
 

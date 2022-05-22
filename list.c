@@ -29,6 +29,29 @@ struct list *list_append(struct list *l, void *data)
 	return l->next;
 }
 
+struct list *list_delete(struct list *l)
+{
+	struct list *remaining;
+	if (l == NULL)
+		return NULL;
+
+	remaining = NULL;
+
+	if (l->next != NULL) {
+		remaining = l->next;
+		l->next->prev = l->prev;
+	}
+
+	if (l->prev != NULL) {
+		remaining = l->prev;
+		l->prev->next = l->next;
+	}
+
+	free(l);
+
+	return remaining;
+}
+
 struct list *list_end(struct list *l)
 {
 	if (l == NULL)
