@@ -5,22 +5,21 @@ OBJS := $(patsubst %.c,%.o,$(SRC))
 
 CHECK_SRC := $(filter %_check.c, $(wildcard *.c))
 CHECK_OBJS := $(patsubst %.c,%.o,$(CHECK_SRC))
-CHECK_BINS := $(patsubst %.c,%,$(CHECK_SRC))
 
 ifeq ($(OS),Windows_NT)
 	DIST_LIBS := ynot_c_ds.dll
-	CHECK_BINS := $(patsubst %.c,%.exe,$(CHECK_SRC))
+	CHECK_BIN := ynot_c_ds_check.exe
 else
 	DIST_LIBS := libynot_c_ds.so
-	CHECK_BINS := $(patsubst %.c,%,$(CHECK_SRC))
+	CHECK_BIN := ynot_c_ds_check.exe
 endif
 
 .PHONY: all check clean superclean
 
 all: $(DIST_LIBS)
 
-check: $(CHECK_BINS)
-	$(foreach check_bin, $^, $(dir $(check_bin))$(notdir $(check_bin));)
+check: $(CHECK_BIN)
+	$(dir $<)$(notdir $<)
 
 clean:
 	rm -f $(OBJS) $(DIST_LIBS) $(CHECK_OBJS) $(CHECK_BINS) \
@@ -40,7 +39,7 @@ include $(CHECK_SRC:.c=.d)
 
 %_check %_check.exe: LDFLAGS += -L.
 %_check %_check.exe: LDLIBS += -lcheck -lynot_c_ds
-%_check %_check.exe: %_check.o $(DIST_LIBS)
+%_check %_check.exe: $(CHECK_OBJS) $(DIST_LIBS)
 	$(CC) $(LDFLAGS) -o  $@ $(filter %.o,$^) $(LOADLIBES) $(LDLIBS)
 
 %.so %.dll: LDFLAGS += -shared

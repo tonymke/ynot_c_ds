@@ -3,6 +3,7 @@
 #include <check.h>
 
 #include "list.h"
+#include "list_check.h"
 
 START_TEST(test_list_append)
 {
@@ -279,42 +280,22 @@ START_TEST(test_list_start)
 }
 END_TEST
 
-Suite *list_suite(void)
+TCase *list_tcase_init()
 {
-	Suite *s;
-	TCase *tc_core;
+	TCase *tc;
 
-	s = suite_create("list");
+	tc = tcase_create("list");
+	tcase_add_test(tc, test_list_append);
+	tcase_add_test(tc, test_list_delete);
+	tcase_add_test(tc, test_list_end);
+	tcase_add_test(tc, test_list_get);
+	tcase_add_test(tc, test_list_insert);
+	tcase_add_test(tc, test_list_len);
+	tcase_add_test(tc, test_list_lifecycle);
+	tcase_add_test(tc, test_list_pop);
+	tcase_add_test(tc, test_list_pop_left);
+	tcase_add_test(tc, test_list_prepend);
+	tcase_add_test(tc, test_list_start);
 
-	tc_core = tcase_create("Core");
-
-	tcase_add_test(tc_core, test_list_append);
-	tcase_add_test(tc_core, test_list_delete);
-	tcase_add_test(tc_core, test_list_end);
-	tcase_add_test(tc_core, test_list_get);
-	tcase_add_test(tc_core, test_list_insert);
-	tcase_add_test(tc_core, test_list_len);
-	tcase_add_test(tc_core, test_list_lifecycle);
-	tcase_add_test(tc_core, test_list_pop);
-	tcase_add_test(tc_core, test_list_pop_left);
-	tcase_add_test(tc_core, test_list_prepend);
-	tcase_add_test(tc_core, test_list_start);
-	suite_add_tcase(s, tc_core);
-
-	return s;
-}
-
-int main()
-{
-	int num_failed;
-	Suite *s;
-	SRunner *sr;
-
-	s = list_suite();
-	sr = srunner_create(s);
-
-	srunner_run_all(sr, CK_ENV);
-	num_failed = srunner_ntests_failed(sr);
-	srunner_free(sr);
-	return (num_failed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
+	return tc;
 }
