@@ -11,7 +11,7 @@ ifeq ($(OS),Windows_NT)
 	CHECK_BIN := ynot_c_ds_check.exe
 else
 	DIST_LIBS := libynot_c_ds.so
-	CHECK_BIN := ynot_c_ds_check.exe
+	CHECK_BIN := ynot_c_ds_check
 endif
 
 .PHONY: all check clean superclean
