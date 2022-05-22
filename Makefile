@@ -1,16 +1,15 @@
 CFLAGS := -ansi -Wall -Wextra -Werror -pedantic -pedantic-errors
-TARGET_LIB_LDFLAGS := $(LDFLAGS) -shared
 
-TARGET_LIBS := libynot_c_ds
-CHECK_BINS := list_check
-CHECK_SRC := $(filter %_check.c, $(wildcard *.c))
+DISTS := libynot_c_ds.so
 SRC := $(filter-out %_check.c, $(wildcard *.c))
 OBJS := $(patsubst %.c,%.o,$(SRC))
-CHECK_OBJS := $(patsubst %.c,%.o,$(CHECK_SRC))
+
+CHECK_SRC := $(filter %_check.c, $(wildcard *.c))
+CHECK_BINS := $(patsubst %.c,%,$(CHECK_SRC))
 
 .PHONY: all check clean
 
-all: $(TARGET_LIBS)
+all: $(DISTS)
 
 check: $(CHECK_BINS)
 	@for bin in $^; do \
@@ -24,7 +23,7 @@ check: $(CHECK_BINS)
 	done
 
 clean:
-	rm -f $(CHECK_BINS) $(TARGET_LIBS) *.o *.d *.exe
+	rm -f $(CHECK_BINS) $(DISTS) *.o *.d *.exe
 
 include $(SRC:.c=.d)
 include $(CHECK_SRC:.c=.d)
@@ -35,7 +34,10 @@ include $(CHECK_SRC:.c=.d)
 	sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
 	rm -f $@.$$$$
 
-$(CHECK_BINS): $(OBJS) $(CHECK_OBJS)
+%_check: LDLIBS = -lcheck
+%_check: %_check.o $(OBJS)
+	$(CC) $(CHECK_LD_FLAGS) -o  $@ $^ $(LOADLIBES) $(LDLIBS)
 
-$(TARGET_LIBS): $(OBJS)
-	$(CC) $(TARGET_LIB_LDFLAGS) -o  $@ $^ $(LOADLIBES) $(LDLIBS)
+%.so: LDFLAGS = -shared
+%.so: $(OBJS)
+	$(CC) $(LDFLAGS) -o  $@ $^ $(LOADLIBES) $(LDLIBS)
