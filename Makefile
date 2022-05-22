@@ -1,29 +1,33 @@
-CFLAGS := -ansi -Wall -Wextra -Werror -pedantic -pedantic-errors
+CFLAGS := -g -ansi -Wall -Wextra -Werror -pedantic -pedantic-errors
 
-DISTS := libynot_c_ds.so
 SRC := $(filter-out %_check.c, $(wildcard *.c))
 OBJS := $(patsubst %.c,%.o,$(SRC))
 
 CHECK_SRC := $(filter %_check.c, $(wildcard *.c))
+CHECK_OBJS := $(patsubst %.c,%.o,$(CHECK_SRC))
 CHECK_BINS := $(patsubst %.c,%,$(CHECK_SRC))
 
-.PHONY: all check clean
+ifeq ($(OS),Windows_NT)
+	DIST_LIBS := ynot_c_ds.dll
+	CHECK_BINS := $(patsubst %.c,%.exe,$(CHECK_SRC))
+else
+	DIST_LIBS := libynot_c_ds.so
+	CHECK_BINS := $(patsubst %.c,%,$(CHECK_SRC))
+endif
 
-all: $(DISTS)
+.PHONY: all check clean superclean
+
+all: $(DIST_LIBS)
 
 check: $(CHECK_BINS)
-	@for bin in $^; do \
-		printf "$$bin: "; \
-		if $(dir $$bin)$(notdir $$bin); then \
-			printf "PASS %d\n" $$?; \
-		else \
-			printf "FAIL %d\n" $$?; \
-			exit 1; \
-		fi \
-	done
+	$(foreach check_bin, $^, $(dir $(check_bin))$(notdir $(check_bin));)
 
 clean:
-	rm -f $(CHECK_BINS) $(DISTS) *.o *.d *.exe
+	rm -f $(OBJS) $(DIST_LIBS) $(CHECK_OBJS) $(CHECK_BINS) \
+		$(patsubst %.o,%.d,$(CHECK_OBJS)) $(patsubst %.o,%.d,$(OBJS))
+
+superclean:
+	rm -f $(CHECK_BINS) *.{o,d,exe,so,dll}
 
 include $(SRC:.c=.d)
 include $(CHECK_SRC:.c=.d)
@@ -34,10 +38,11 @@ include $(CHECK_SRC:.c=.d)
 	sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
 	rm -f $@.$$$$
 
-%_check: LDLIBS = -lcheck
-%_check: %_check.o $(OBJS)
-	$(CC) $(CHECK_LD_FLAGS) -o  $@ $^ $(LOADLIBES) $(LDLIBS)
+%_check %_check.exe: LDFLAGS += -L.
+%_check %_check.exe: LDLIBS += -lcheck -lynot_c_ds
+%_check %_check.exe: %_check.o $(DIST_LIBS)
+	$(CC) $(LDFLAGS) -o  $@ $(filter %.o,$^) $(LOADLIBES) $(LDLIBS)
 
-%.so: LDFLAGS = -shared
-%.so: $(OBJS)
+%.so %.dll: LDFLAGS += -shared
+%.so %.dll: $(OBJS)
 	$(CC) $(LDFLAGS) -o  $@ $^ $(LOADLIBES) $(LDLIBS)
