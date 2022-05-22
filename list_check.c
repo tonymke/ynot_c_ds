@@ -136,25 +136,46 @@ void test_list_prepend()
 
 void test_list_pop()
 {
-	struct list *l, *start;
-	int end_data, other_data;
+	struct list *l;
+	int a_data, b_data, c_data;
 
-	end_data = 1234;
-	other_data = 5678;
 	l = NULL;
-
 	assert(list_pop(l) == NULL);
 
-	start = l = list_append(l, &other_data);
-	l = list_append(l, &other_data);
-	l = list_append(l, &end_data);
+	a_data = 1;
+	l = list_append(l, &a_data);
+	b_data = 2;
+	list_append(l, &b_data);
+	c_data = 3;
+	list_append(l, &c_data);
 
-	assert(list_len(start) == 3);
-	assert(list_pop(start) == &end_data);
-	assert(list_len(start) == 2);
-	assert(list_pop(start) == &other_data);
-	assert(list_len(start) == 1);
-	assert(list_pop(start) == &other_data);
+	assert(list_pop(l) == &c_data);
+	assert(list_len(l) == 2);
+	assert(list_pop(l) == &b_data);
+	assert(list_len(l) == 1);
+	assert(list_pop(l) == &a_data);
+}
+
+void test_list_pop_left()
+{
+	struct list *l;
+	int a_data, b_data, c_data;
+
+	l = NULL;
+	assert(list_pop(l) == NULL);
+
+	a_data = 1;
+	l = list_append(l, &a_data);
+	b_data = 2;
+	l = list_append(l, &b_data);
+	c_data = 3;
+	l = list_append(l, &c_data);
+
+	assert(list_pop_left(l) == &a_data);
+	assert(list_len(l) == 2);
+	assert(list_pop_left(l) == &b_data);
+	assert(list_len(l) == 1);
+	assert(list_pop_left(l) == &c_data);
 }
 
 void test_list_start()
@@ -187,6 +208,7 @@ int main()
 	test_list_len();
 	test_list_lifecycle();
 	test_list_pop();
+	test_list_pop_left();
 	test_list_prepend();
 	test_list_start();
 

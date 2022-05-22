@@ -124,6 +124,24 @@ void *list_pop(struct list *l)
 	return data;
 }
 
+void *list_pop_left(struct list *l)
+{
+	void *data;
+
+	if (l == NULL)
+		return NULL;
+
+	l = list_start(l);
+	data = l->data;
+
+	if (l->next != NULL)
+		l->next->prev = NULL;
+
+	free(l);
+
+	return data;
+}
+
 struct list *list_prepend(struct list *l, void *data)
 {
 	l = list_start(l);
