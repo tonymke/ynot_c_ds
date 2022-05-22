@@ -14,8 +14,9 @@ struct list* list_alloc();
 #define list_free(l) (list_free_full((l), NULL))
 void list_free_full(struct list *l, void (*data_free)(void *data));
 
-size_t list_len(struct list *l);
 struct list *list_end(struct list *l);
+struct list *list_get(struct list *l, size_t i);
+size_t list_len(struct list *l);
 struct list *list_start(struct list *l);
 
 struct list *list_append(struct list *l, void *data);

@@ -72,6 +72,46 @@ void test_list_end()
 	assert((list_end(l))->data == &end_data);
 
 	assert((list_end(start))->data == &end_data);
+
+	list_free(l);
+}
+
+void test_list_get()
+{
+	struct list *a, *b, *c;
+
+	assert(list_get(NULL, 0) == NULL);
+
+	a = list_append(NULL, NULL);
+	assert(list_get(a, 0) == a);
+	assert(list_get(a, 1) == NULL);
+
+	b = list_append(a, NULL);
+	assert(list_get(a, 0) == a);
+	assert(list_get(a, 1) == b);
+	assert(list_get(a, 2) == NULL);
+
+	assert(list_get(b, 0) == a);
+	assert(list_get(b, 1) == b);
+	assert(list_get(b, 2) == NULL);
+
+	c = list_append(b, NULL);
+	assert(list_get(a, 0) == a);
+	assert(list_get(a, 1) == b);
+	assert(list_get(a, 2) == c);
+	assert(list_get(a, 3) == NULL);
+
+	assert(list_get(b, 0) == a);
+	assert(list_get(b, 1) == b);
+	assert(list_get(b, 2) == c);
+	assert(list_get(b, 3) == NULL);
+
+	assert(list_get(c, 0) == a);
+	assert(list_get(c, 1) == b);
+	assert(list_get(b, 2) == c);
+	assert(list_get(b, 3) == NULL);
+
+	list_free(a);
 }
 
 void test_list_insert()
@@ -122,6 +162,8 @@ void test_list_len() {
 	assert(list_len(start) == 3);
 	assert(list_len(end) == 3);
 	assert(list_len(mid) == 3);
+
+	list_free(start);
 }
 
 void test_list_lifecycle()
@@ -229,6 +271,7 @@ int main()
 	test_list_append();
 	test_list_delete();
 	test_list_end();
+	test_list_get();
 	test_list_insert();
 	test_list_len();
 	test_list_lifecycle();

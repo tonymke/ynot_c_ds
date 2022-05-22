@@ -89,6 +89,16 @@ void list_free_full(struct list *l, void (*data_free)(void *data))
 	}
 }
 
+struct list *list_get(struct list *l, size_t i)
+{
+	size_t j;
+
+	for (j = 0, l = list_start(l); j < i && l != NULL; j++, l = l->next) {
+	}
+
+	return i == j ? l : NULL;
+}
+
 size_t list_len(struct list *l)
 {
 	size_t n;
