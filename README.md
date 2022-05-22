@@ -4,12 +4,12 @@ A data structures library written in C written as a refresher on the language.
 
 ## Progress
 
-- [partial] list (doubly linked list)
+- [x] list (doubly linked list)
 - [ ] array (dynamic array)
 - [ ] map (hashmap)
 - [ ] queue (fixed-size array)
 - [ ] priority queue (heap)
-- [ ] bitmask trie
+- [ ] trie (bitmask trie)
 
 ## License
 
