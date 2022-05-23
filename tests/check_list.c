@@ -2,8 +2,7 @@
 
 #include <check.h>
 
-#include "list.h"
-#include "list_check.h"
+#include "../src/list.h"
 
 START_TEST(test_list_append)
 {
@@ -280,11 +279,13 @@ START_TEST(test_list_start)
 }
 END_TEST
 
-TCase *list_tcase_init()
+Suite *list_suite(void)
 {
+	Suite *s;
 	TCase *tc;
 
-	tc = tcase_create("list");
+	s = suite_create("list");
+	tc = tcase_create("Core");
 	tcase_add_test(tc, test_list_append);
 	tcase_add_test(tc, test_list_delete);
 	tcase_add_test(tc, test_list_end);
@@ -296,6 +297,22 @@ TCase *list_tcase_init()
 	tcase_add_test(tc, test_list_pop_left);
 	tcase_add_test(tc, test_list_prepend);
 	tcase_add_test(tc, test_list_start);
+	suite_add_tcase(s, tc);
 
-	return tc;
+	return s;
+}
+
+int main()
+{
+	int num_failed;
+	Suite *s;
+	SRunner *sr;
+
+	s = list_suite();
+	sr = srunner_create(s);
+
+	srunner_run_all(sr, CK_ENV);
+	num_failed = srunner_ntests_failed(sr);
+	srunner_free(sr);
+	return (num_failed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
 }

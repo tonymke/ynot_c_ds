@@ -1,0 +1,3 @@
+#!/bin/sh -e
+
+exec ./configure "CFLAGS=-ansi -Wall -Wextra -Werror -pedantic -pedantic-errors -g -Og" $@
