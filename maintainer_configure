@@ -1,3 +1,15 @@
 #!/bin/sh -e
 
-exec ./configure "CFLAGS=-ansi -Wall -Wextra -Werror -pedantic -pedantic-errors -g -Og" $@
+export CFLAGS="   \
+-ansi             \
+-fanalyzer        \
+-g                \
+-Og               \
+-pedantic         \
+-pedantic-errors  \
+-Wall             \
+-Werror           \
+-Wextra           \
+"
+
+exec ./configure $@
