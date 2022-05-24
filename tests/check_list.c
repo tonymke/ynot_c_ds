@@ -4,9 +4,12 @@
 
 #include "ynot_c_ds.h"
 
-START_TEST(test_placeholder)
+START_TEST(test_lifecycle)
 {
-	ck_assert(1);
+	list *l;
+	l = list_alloc();
+	ck_assert_ptr_nonnull(l);
+	list_free(l);
 }
 END_TEST
 
@@ -18,7 +21,7 @@ Suite *list_suite(void)
 	s = suite_create("list");
 	tc = tcase_create("Core");
 
-	tcase_add_test(tc, test_placeholder);
+	tcase_add_test(tc, test_lifecycle);
 
 	suite_add_tcase(s, tc);
 
