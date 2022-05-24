@@ -2,7 +2,7 @@
 
 #include <check.h>
 
-#include "list.h"
+#include "ynot_c_ds.h"
 
 START_TEST(test_list_append)
 {

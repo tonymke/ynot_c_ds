@@ -1,7 +1,7 @@
 #include <stdlib.h>
 
-#ifndef YNOT_C_DS_LIST_H
-#define YNOT_C_DS_LIST_H
+#ifndef YNOT_C_DS_H
+#define YNOT_C_DS_H
 
 struct list {
 	struct list *next;
@@ -27,4 +27,4 @@ struct list *list_delete(struct list *l);
 void *list_pop(struct list *l);
 void *list_pop_left(struct list *l);
 
-#endif /* YNOT_C_DS_LIST_H */
+#endif /* YNOT_C_DS_H */
