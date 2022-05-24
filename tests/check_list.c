@@ -193,13 +193,12 @@ START_TEST(test_removal)
 	list_free(lst);
 }
 
-Suite *list_suite(void)
+TCase *list_case(void)
 {
-	Suite *s;
-	TCase *tc;
-
-	s = suite_create("list");
-	tc = tcase_create("Core");
+	TCase *tc = tcase_create("list");
+	if (tc == NULL) {
+		return NULL;
+	}
 
 	tcase_add_test(tc, test_alloc_free);
 	tcase_add_test(tc, test_insert);
@@ -207,22 +206,5 @@ Suite *list_suite(void)
 	tcase_add_test(tc, test_peek);
 	tcase_add_test(tc, test_removal);
 
-	suite_add_tcase(s, tc);
-
-	return s;
-}
-
-int main()
-{
-	int num_failed;
-	Suite *s;
-	SRunner *sr;
-
-	s = list_suite();
-	sr = srunner_create(s);
-
-	srunner_run_all(sr, CK_ENV);
-	num_failed = srunner_ntests_failed(sr);
-	srunner_free(sr);
-	return (num_failed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
+	return tc;
 }

@@ -1,7 +1,12 @@
-TESTS = check_list
-check_PROGRAMS = check_list
-check_list_SOURCES = check_list.c ynot_c_ds.h
-check_list_CFLAGS = @CHECK_CFLAGS@
-check_list_CPPFLAGS = -I$(top_builddir)/src
-check_list_LDADD = $(top_builddir)/src/libynot_c_ds.la @CHECK_LIBS@
-check_list_LDFLAGS = -no-undefined
+TESTS = check_ynot_c_ds
+check_PROGRAMS = check_ynot_c_ds
+check_ynot_c_ds_SOURCES =                   \
+						  check_array.c     \
+						  check_list.c      \
+						  check_ynot_c_ds.h \
+						  check_ynot_c_ds.c \
+						  ynot_c_ds.h
+check_ynot_c_ds_CFLAGS = @CHECK_CFLAGS@
+check_ynot_c_ds_CPPFLAGS = -I$(top_builddir)/src
+check_ynot_c_ds_LDADD = $(top_builddir)/src/libynot_c_ds.la @CHECK_LIBS@
+check_ynot_c_ds_LDFLAGS = -no-undefined
