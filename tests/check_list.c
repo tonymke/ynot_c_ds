@@ -2,7 +2,7 @@
 
 #include <check.h>
 
-#include "../src/list.h"
+#include "list.h"
 
 START_TEST(test_list_append)
 {
