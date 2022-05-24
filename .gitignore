@@ -1,10 +1,15 @@
 *.[do]
-*.so
 *.exe
-config.h
-ynot_c_ds-*.*.tar.gz
-libtool
+*.la
+*.lo
+*.log
+*.so
+*.trs
 *~
+.libs/
+config.h
+libtool
+ynot_c_ds-*.*.tar.gz
 
 # Created by https://www.toptal.com/developers/gitignore/api/autotools+strict
 # Edit at https://www.toptal.com/developers/gitignore?templates=autotools+strict
