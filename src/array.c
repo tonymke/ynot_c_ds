@@ -139,6 +139,31 @@ size_t array_len(array *arr) {
 	return arr->len;
 }
 
+void *array_remove_at(array *arr, size_t i)
+{
+	void *removed;
+
+	if (arr == NULL) {
+		return NULL;
+	}
+
+	if (i >= arr->len) {
+		return NULL;
+	}
+
+	removed = arr->data[i];
+	if (i < arr->len) {
+		size_t copy_i;
+
+		for(copy_i = i; copy_i < arr->len-1; copy_i++) {
+			arr->data[copy_i] = arr->data[copy_i + 1];
+		}
+	}
+
+	arr->len--;
+	return removed;
+}
+
 void *array_set(array *arr, size_t i, void *value)
 {
 	void *replaced;

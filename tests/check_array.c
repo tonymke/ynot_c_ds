@@ -99,6 +99,44 @@ START_TEST(test_set)
 }
 END_TEST
 
+START_TEST(test_remove_at)
+{
+	array *arr;
+	void *removed;
+	int a, b, c;
+
+	a = 1;
+	b = 2;
+	c = 3;
+
+	removed = array_remove_at(NULL, 0);
+	ck_assert_ptr_null(removed);
+
+	arr = array_alloc();
+	ck_assert_ptr_nonnull(arr);
+	removed = array_set(arr, 0, &a);
+	ck_assert_ptr_null(removed);
+
+	array_add(arr, &a);
+	array_add(arr, &b);
+	array_add(arr, &c);
+
+	removed = array_remove_at(arr, 0);
+	ck_assert_ptr_eq(&a, removed);
+	ck_assert_uint_eq(2L, array_len(arr));
+
+	removed = array_remove_at(arr, 1);
+	ck_assert_ptr_eq(&c, removed);
+	ck_assert_uint_eq(1L, array_len(arr));
+
+	removed = array_remove_at(arr, 0);
+	ck_assert_ptr_eq(&b, removed);
+	ck_assert_uint_eq(0L, array_len(arr));
+
+	array_free(arr);
+}
+END_TEST
+
 TCase *array_case(void)
 {
 	TCase *tc = tcase_create("suite");
@@ -108,6 +146,7 @@ TCase *array_case(void)
 
 	tcase_add_test(tc, test_alloc_free);
 	tcase_add_test(tc, test_add_insert);
+	tcase_add_test(tc, test_remove_at);
 	tcase_add_test(tc, test_set);
 
 	return tc;
