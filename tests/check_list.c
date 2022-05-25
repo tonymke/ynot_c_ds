@@ -64,10 +64,10 @@ START_TEST(test_insert)
 	ck_assert_ptr_eq(&c, list_peek(lst));
 	ck_assert_ptr_eq(&a, list_peek_left(lst));
 
-	ok = list_insert(lst, &b, 3);
+	ok = list_insert(lst, 3, &b);
 	ck_assert_int_eq(YNOT_EOUTOFRANGE, ok);
 
-	ok = list_insert(lst, &b, 1);
+	ok = list_insert(lst, 1, &b);
 	ck_assert_int_eq(YNOT_OK, ok);
 	ck_assert_uint_eq(3U, list_len(lst));
 	ck_assert_ptr_eq(&a, list_peek_at(lst, 0));
@@ -182,7 +182,7 @@ START_TEST(test_removal)
 
 	ck_assert_ptr_eq(&b, list_remove_at(lst, 1));
 	ck_assert_uint_eq(2U, list_len(lst));
-	ck_assert_int_eq(YNOT_OK, list_insert(lst, &b, 1));
+	ck_assert_int_eq(YNOT_OK, list_insert(lst, 1, &b));
 
 	ck_assert_ptr_eq(&a, list_pop_left(lst));
 	ck_assert_uint_eq(2U, list_len(lst));

@@ -34,7 +34,7 @@ void  *array_set            (array *arr, void *value, size_t i);
 list  *list_alloc     (void);
 int    list_append    (list *lst, void *value);
 void   list_free_full (list *lst, void (*free_value)(void *value));
-int    list_insert    (list *lst, void *value, size_t i);
+int    list_insert    (list *lst, size_t i, void *value);
 size_t list_len       (list *lst);
 void  *list_peek      (list *lst);
 void  *list_peek_at   (list *lst, size_t i);

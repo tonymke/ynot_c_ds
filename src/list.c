@@ -46,7 +46,7 @@ int list_append(list *lst, void *value)
 		return YNOT_EINVALIDPARAM;
 	}
 
-	return list_insert(lst, value, lst->len);
+	return list_insert(lst, lst->len, value);
 }
 
 void list_free_full(list *lst, void (*free_value)(void *value))
@@ -67,7 +67,7 @@ void list_free_full(list *lst, void (*free_value)(void *value))
 	free(lst);
 }
 
-int list_insert(list *lst, void *value, size_t i)
+int list_insert(list *lst, size_t i, void *value)
 {
 	struct list_node *cur_node, *new_node;
 
@@ -213,7 +213,7 @@ void *list_pop_left(list *lst)
 
 int list_prepend(list *lst, void *value)
 {
-	return list_insert(lst, value, 0);
+	return list_insert(lst, 0, value);
 }
 
 void *list_remove_at(list *lst, size_t i)
