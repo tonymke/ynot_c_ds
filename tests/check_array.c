@@ -87,34 +87,6 @@ START_TEST(test_add_insert)
 }
 END_TEST
 
-START_TEST(test_set)
-{
-	array *arr;
-	void *replaced;
-	int a, b, err;
-
-	a = 1;
-	b = 2;
-
-	replaced = array_set(NULL, 0, &a);
-	ck_assert_ptr_null(replaced);
-
-	arr = array_alloc();
-	ck_assert_ptr_nonnull(arr);
-	replaced = array_set(arr, 0, &a);
-	ck_assert_ptr_null(replaced);
-
-	err = array_add(arr, &a);
-	ck_assert_int_eq(YNOT_OK, err);
-	replaced = array_set(arr, 0, &b);
-	ck_assert_ptr_eq(&a, replaced);
-
-	ck_assert_ptr_eq(&b, array_get(arr, 0));
-
-	array_free(arr);
-}
-END_TEST
-
 START_TEST(test_remove_at)
 {
 	array *arr;
@@ -148,6 +120,34 @@ START_TEST(test_remove_at)
 	removed = array_remove_at(arr, 0);
 	ck_assert_ptr_eq(&b, removed);
 	ck_assert_uint_eq(0L, array_len(arr));
+
+	array_free(arr);
+}
+END_TEST
+
+START_TEST(test_set)
+{
+	array *arr;
+	void *replaced;
+	int a, b, err;
+
+	a = 1;
+	b = 2;
+
+	replaced = array_set(NULL, 0, &a);
+	ck_assert_ptr_null(replaced);
+
+	arr = array_alloc();
+	ck_assert_ptr_nonnull(arr);
+	replaced = array_set(arr, 0, &a);
+	ck_assert_ptr_null(replaced);
+
+	err = array_add(arr, &a);
+	ck_assert_int_eq(YNOT_OK, err);
+	replaced = array_set(arr, 0, &b);
+	ck_assert_ptr_eq(&a, replaced);
+
+	ck_assert_ptr_eq(&b, array_get(arr, 0));
 
 	array_free(arr);
 }
