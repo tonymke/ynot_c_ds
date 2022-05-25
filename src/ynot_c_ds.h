@@ -3,7 +3,7 @@
 
 #include <stdlib.h>
 
-enum ynot_errors {
+enum ynot_error {
 	YNOT_OK = 0,
 
 	YNOT_EUNKNOWN      = -1,
@@ -23,7 +23,7 @@ array *array_alloc_capacity  (size_t initial_capacity);
 void   array_clear           (array *arr);
 void   array_free_full       (array *arr, void (*free_value)(void *value));
 int    array_insert          (array *arr, size_t i, void *value);
-int    array_ensure_capacity (array *arr, size_t capacity);
+int    array_ensure_capacity (array *arr, size_t min_capacity);
 size_t array_len             (array *arr);
 void  *array_get             (array *arr, size_t i);
 void  *array_remove_at       (array *arr, size_t i);
