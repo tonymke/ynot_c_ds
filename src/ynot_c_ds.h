@@ -27,7 +27,7 @@ size_t array_len             (array *arr);
 void  *array_get             (array *arr, size_t i);
 void  *array_remove_at       (array *arr, size_t i);
 void  *array_set             (array *arr, size_t i, void *value);
-int    array_trim            (array *arr);
+int    array_trim_capacity   (array *arr);
 
 list  *list_alloc     (void);
 int    list_append    (list *lst, void *value);

@@ -114,7 +114,6 @@ void *array_get(array *arr, size_t i)
 int array_insert(array *arr, size_t i, void *value)
 {
 	int err;
-
 	if (arr == NULL) {
 		return YNOT_EINVALIDPARAM;
 	}
@@ -130,7 +129,6 @@ int array_insert(array *arr, size_t i, void *value)
 
 	if (i < arr->len) {
 		size_t copy_i;
-
 		for (copy_i = arr->len; copy_i > i; copy_i--) {
 			arr->data[copy_i] = arr->data[copy_i-1];
 		}
@@ -191,6 +189,39 @@ void *array_set(array *arr, size_t i, void *value)
 	arr->data[i] = value;
 
 	return replaced;
+}
+
+int array_trim_capacity(array *arr)
+{
+	void *new_data;
+	if (arr == NULL) {
+		return YNOT_EINVALIDPARAM;
+	}
+
+	if (arr->len == arr->capacity) {
+		return YNOT_OK;
+	}
+
+	if (arr->len == 0) {
+		free(arr->data);
+		arr->data = NULL;
+		arr->capacity = 0;
+		return YNOT_OK;
+	}
+
+	new_data = realloc(
+		arr->data,
+		sizeof(*arr->data) * arr->len
+	);
+	if (new_data == NULL) {
+		perror("array_trim_capacity: realloc");
+		return YNOT_ENOMEM;
+	}
+
+	arr->data = new_data;
+	arr->capacity = arr->len;
+
+	return YNOT_OK;
 }
 
 size_t next_power_of_2(size_t x)

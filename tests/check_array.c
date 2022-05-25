@@ -153,6 +153,40 @@ START_TEST(test_set)
 }
 END_TEST
 
+START_TEST(test_trim_capacity)
+{
+	int err;
+	size_t i;
+
+	array *arr = NULL;
+	array_trim_capacity(arr);
+
+	arr = array_alloc_capacity(0);
+	ck_assert_ptr_nonnull(arr);
+	array_trim_capacity(arr);
+	array_free(arr);
+
+	arr = array_alloc_capacity(0);
+	ck_assert_ptr_nonnull(arr);
+	err = array_ensure_capacity(arr, 20);
+	ck_assert_int_eq(YNOT_OK, err);
+	array_trim_capacity(arr);
+	array_free(arr);
+
+	arr = array_alloc_capacity(50);
+	ck_assert_ptr_nonnull(arr);
+	array_trim_capacity(arr);
+	for (i = 0; i < 20; i++) {
+		err = array_add(arr, NULL);
+		ck_assert_int_eq(YNOT_OK, err);
+	}
+	err = array_ensure_capacity(arr, 50);
+	ck_assert_int_eq(YNOT_OK, err);
+	ck_assert_uint_eq(20L, array_len(arr));
+	array_free(arr);
+}
+END_TEST
+
 TCase *array_case(void)
 {
 	TCase *tc = tcase_create("suite");
@@ -165,6 +199,7 @@ TCase *array_case(void)
 	tcase_add_test(tc, test_clear);
 	tcase_add_test(tc, test_remove_at);
 	tcase_add_test(tc, test_set);
+	tcase_add_test(tc, test_trim_capacity);
 
 	return tc;
 }
