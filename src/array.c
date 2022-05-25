@@ -53,7 +53,6 @@ void array_clear(array *arr)
 	}
 
 	arr->len = 0;
-	arr->len = arr->capacity = 0;
 }
 
 int array_ensure_capacity(array *arr, size_t min_capacity)
