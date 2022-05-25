@@ -52,8 +52,7 @@ void array_clear(array *arr)
 		return;
 	}
 
-	free(arr->data);
-	arr->data = NULL;
+	arr->len = 0;
 	arr->len = arr->capacity = 0;
 }
 
