@@ -6,10 +6,9 @@
 enum ynot_error {
 	YNOT_OK = 0,
 
-	YNOT_EUNKNOWN      = -1,
-	YNOT_EINVALIDPARAM = -2,
-	YNOT_ENOMEM        = -3,
-	YNOT_EOUTOFRANGE   = -4
+	YNOT_EINVALIDPARAM = -1,
+	YNOT_ENOMEM        = -2,
+	YNOT_EOUTOFRANGE   = -3
 };
 
 struct array;

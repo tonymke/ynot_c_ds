@@ -139,6 +139,24 @@ size_t array_len(array *arr) {
 	return arr->len;
 }
 
+void *array_set(array *arr, size_t i, void *value)
+{
+	void *replaced;
+
+	if (arr == NULL) {
+		return NULL;
+	}
+
+	if (i >= arr->len) {
+		return NULL;
+	}
+
+	replaced = arr->data[i];
+	arr->data[i] = value;
+
+	return replaced;
+}
+
 size_t next_power_of_2(size_t x)
 {
 	static const size_t metasize = sizeof(metasize) * 8 / 2;

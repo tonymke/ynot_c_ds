@@ -38,19 +38,19 @@ END_TEST
 START_TEST(test_add_insert)
 {
 	array *arr;
-	int a, b, c, ok;
+	int a, b, c, err;
 	a = 1;
 	b = 2;
 	c = 3;
 
-	ok = array_insert(NULL, 0, &a);
-	ck_assert_int_eq(YNOT_EINVALIDPARAM, ok);
+	err = array_insert(NULL, 0, &a);
+	ck_assert_int_eq(YNOT_EINVALIDPARAM, err);
 
 
 	arr = array_alloc();
 	ck_assert_ptr_nonnull(arr);
-	ok = array_insert(arr, 50, &a);
-	ck_assert_int_eq(YNOT_EOUTOFRANGE, ok);
+	err = array_insert(arr, 50, &a);
+	ck_assert_int_eq(YNOT_EOUTOFRANGE, err);
 	ck_assert_uint_eq(0L, array_len(arr));
 
 	array_add(arr, &c);
@@ -71,6 +71,33 @@ START_TEST(test_add_insert)
 	array_free(arr);
 }
 
+START_TEST(test_set)
+{
+	array *arr;
+	void *replaced;
+	int a, b, err;
+
+	a = 1;
+	b = 2;
+
+	replaced = array_set(NULL, 0, &a);
+	ck_assert_ptr_null(replaced);
+
+	arr = array_alloc();
+	ck_assert_ptr_nonnull(arr);
+	replaced = array_set(arr, 0, &a);
+	ck_assert_ptr_null(replaced);
+
+	err = array_add(arr, &a);
+	ck_assert_int_eq(YNOT_OK, err);
+	replaced = array_set(arr, 0, &b);
+	ck_assert_ptr_eq(&a, replaced);
+
+	ck_assert_ptr_eq(&b, array_get(arr, 0));
+
+	array_free(arr);
+}
+
 TCase *array_case(void)
 {
 	TCase *tc = tcase_create("suite");
@@ -80,6 +107,7 @@ TCase *array_case(void)
 
 	tcase_add_test(tc, test_alloc_free);
 	tcase_add_test(tc, test_add_insert);
+	tcase_add_test(tc, test_set);
 
 	return tc;
 }
