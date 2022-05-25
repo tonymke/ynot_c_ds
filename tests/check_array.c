@@ -46,7 +46,6 @@ START_TEST(test_add_insert)
 	err = array_insert(NULL, 0, &a);
 	ck_assert_int_eq(YNOT_EINVALIDPARAM, err);
 
-
 	arr = array_alloc();
 	ck_assert_ptr_nonnull(arr);
 	err = array_insert(arr, 50, &a);
@@ -70,6 +69,7 @@ START_TEST(test_add_insert)
 
 	array_free(arr);
 }
+END_TEST
 
 START_TEST(test_set)
 {
@@ -97,6 +97,7 @@ START_TEST(test_set)
 
 	array_free(arr);
 }
+END_TEST
 
 TCase *array_case(void)
 {
