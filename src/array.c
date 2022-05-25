@@ -244,7 +244,7 @@ size_t next_power_of_2(size_t x)
 
 	/*
 	 * Derived from public domain work by Sean Anderson
-	 * <seander@cs.stanford.edu.
+	 * <seander@cs.stanford.edu>
 	 * https://graphics.stanford.edu/~seander/bithacks.html#RoundUpPowerOf2
 	 */
 	x--;
