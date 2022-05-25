@@ -35,6 +35,22 @@ START_TEST(test_alloc_free)
 }
 END_TEST
 
+START_TEST(test_clear)
+{
+	array *arr;
+	size_t i;
+
+	arr = array_alloc_capacity(12);
+	ck_assert_ptr_nonnull(arr);
+
+	for(i = 0; i < 12; i++) {
+		array_add(arr, NULL);
+	}
+
+	array_clear(arr);
+	ck_assert_uint_eq(0L, array_len(arr));
+}
+
 START_TEST(test_add_insert)
 {
 	array *arr;
@@ -146,6 +162,7 @@ TCase *array_case(void)
 
 	tcase_add_test(tc, test_alloc_free);
 	tcase_add_test(tc, test_add_insert);
+	tcase_add_test(tc, test_clear);
 	tcase_add_test(tc, test_remove_at);
 	tcase_add_test(tc, test_set);
 

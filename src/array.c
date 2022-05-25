@@ -46,6 +46,17 @@ array *array_alloc_capacity(size_t initial_capacity)
 	return arr;
 }
 
+void array_clear(array *arr)
+{
+	if (arr == NULL || arr->len == 0) {
+		return;
+	}
+
+	free(arr->data);
+	arr->data = NULL;
+	arr->len = arr->capacity = 0;
+}
+
 int array_ensure_capacity(array *arr, size_t min_capacity)
 {
 	void **new_data = NULL;
@@ -87,6 +98,7 @@ void array_free_full(array *arr, void (*free_value)(void *value))
 			}
 		}
 		free(arr->data);
+		arr->data = NULL;
 	}
 	free(arr);
 }
