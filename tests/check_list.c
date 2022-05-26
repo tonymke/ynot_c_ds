@@ -32,6 +32,58 @@ START_TEST(test_alloc_free)
 }
 END_TEST
 
+START_TEST(test_find_ptr)
+{
+	list *lst;
+	int a, b, c, d;
+
+	a = 1;
+	b = 2;
+	c = 3;
+	d = 999;
+
+	lst = NULL;
+	ck_assert_ptr_null(list_find(lst, NULL, ptr_eq));
+	lst = list_alloc();
+
+	ck_assert_ptr_null(list_find(lst, &a, NULL));
+	ck_assert_int_eq(YNOT_OK, list_append(lst, &a));
+	ck_assert_int_eq(YNOT_OK, list_append(lst, &b));
+	ck_assert_int_eq(YNOT_OK, list_append(lst, &c));
+
+	ck_assert_ptr_eq(&a, *(list_find(lst, &a, ptr_eq)));
+	ck_assert_ptr_eq(&b, *(list_find(lst, &b, ptr_eq)));
+	ck_assert_ptr_eq(&c, *(list_find(lst, &c, ptr_eq)));
+	ck_assert_ptr_null(list_find(lst, &d, ptr_eq));
+}
+END_TEST
+
+START_TEST(test_find_str)
+{
+	list *lst;
+	char *a, *b, *c, *d;
+
+	a = "a val";
+	b = "b val";
+	c = "c val";
+	d = "d val";
+
+	lst = NULL;
+	ck_assert_ptr_null(list_find(lst, NULL, str_eq));
+	lst = list_alloc();
+
+	ck_assert_ptr_null(list_find(lst, &a, NULL));
+	ck_assert_int_eq(YNOT_OK, list_append(lst, &a));
+	ck_assert_int_eq(YNOT_OK, list_append(lst, &b));
+	ck_assert_int_eq(YNOT_OK, list_append(lst, &c));
+
+	ck_assert_ptr_eq(&a, *(list_find(lst, &a, str_eq)));
+	ck_assert_ptr_eq(&b, *(list_find(lst, &b, str_eq)));
+	ck_assert_ptr_eq(&c, *(list_find(lst, &c, str_eq)));
+	ck_assert_ptr_null(list_find(lst, &d, str_eq));
+}
+END_TEST
+
 START_TEST(test_insert)
 {
 	list *lst;
@@ -153,8 +205,9 @@ START_TEST(test_peek)
 
 	list_free(lst);
 }
+END_TEST
 
-START_TEST(test_removal)
+START_TEST(test_remove_at)
 {
 	list *lst;
 	int a, b, c;
@@ -189,6 +242,37 @@ START_TEST(test_removal)
 
 	list_free(lst);
 }
+END_TEST
+
+START_TEST(test_remove_val)
+{
+	list *lst;
+	int a, b, c, d;
+
+	a = 1;
+	b = 2;
+	c = 3;
+	d = 999;
+
+	lst = NULL;
+	ck_assert_ptr_null(list_remove_val(lst, &a, ptr_eq));
+
+	lst = list_alloc();
+	ck_assert_int_eq(YNOT_OK, list_append(lst, &a));
+	ck_assert_int_eq(YNOT_OK, list_append(lst, &b));
+	ck_assert_int_eq(YNOT_OK, list_append(lst, &c));
+
+	ck_assert_ptr_null(list_remove_val(lst, &a, NULL));
+	ck_assert_ptr_null(list_remove_val(lst, &a, NULL));
+
+	ck_assert_ptr_eq(&a, list_remove_val(lst, &a, ptr_eq));
+	ck_assert_ptr_eq(&b, list_remove_val(lst, &b, ptr_eq));
+	ck_assert_ptr_eq(&c, list_remove_val(lst, &c, ptr_eq));
+	ck_assert_ptr_null(list_remove_val(lst, &d, ptr_eq));
+
+	list_free(lst);
+}
+END_TEST
 
 TCase *list_case(void)
 {
@@ -198,10 +282,13 @@ TCase *list_case(void)
 	}
 
 	tcase_add_test(tc, test_alloc_free);
+	tcase_add_test(tc, test_find_ptr);
+	tcase_add_test(tc, test_find_str);
 	tcase_add_test(tc, test_insert);
 	tcase_add_test(tc, test_len);
 	tcase_add_test(tc, test_peek);
-	tcase_add_test(tc, test_removal);
+	tcase_add_test(tc, test_remove_at);
+	tcase_add_test(tc, test_remove_val);
 
 	return tc;
 }

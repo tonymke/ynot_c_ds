@@ -17,10 +17,15 @@ struct list_node {
 	struct list_node *next;
 };
 
+static struct list_node *list_find_node        (list *lst,
+						void *value,
+						int (*is_eq)(void *a, void *b));
 static struct list_node *list_node_alloc       (void *value);
 static void              list_node_free        (struct list_node *node,
 						void (*free_value)(void *val));
-static struct list_node *list_peek_at_node (list* lst, size_t i);
+static struct list_node *list_peek_at_node     (list* lst, size_t i);
+static void             *list_remove_node      (list *lst,
+						struct list_node *node);
 
 list *list_alloc(void)
 {
@@ -45,6 +50,37 @@ int list_append(list *lst, void *value)
 	}
 
 	return list_insert(lst, lst->len, value);
+}
+
+void **list_find(list *lst, void *value, int (*is_eq)(void *a, void *b))
+{
+	struct list_node *node;
+
+	node = list_find_node(lst, value, is_eq);
+	if (node != NULL) {
+		return &node->value;
+	}
+
+	return NULL;
+}
+
+struct list_node *list_find_node       (list *lst,
+					void *value,
+					int (*is_eq)(void *a, void *b))
+{
+	struct list_node *node;
+
+	if (lst == NULL || is_eq == NULL) {
+		return NULL;
+	}
+
+	for (node = lst->start; node != NULL; node = node->next) {
+		if (is_eq(value, node->value)) {
+			return node;
+		}
+	}
+
+	return NULL;
 }
 
 void list_free_full(list *lst, void (*free_value)(void *value))
@@ -216,29 +252,37 @@ int list_prepend(list *lst, void *value)
 
 void *list_remove_at(list *lst, size_t i)
 {
-	struct list_node *cursor;
-	void *value;
+	return list_remove_node(lst, list_peek_at_node(lst, i));
+}
 
-	cursor = list_peek_at_node(lst, i);
-	if (cursor == NULL) {
+
+void *list_remove_node(list *lst, struct list_node *node)
+{
+	void *value;
+	if (lst == NULL || node == NULL) {
 		return NULL;
 	}
 
-	value = cursor->value;
-	if (cursor->prev == NULL) {
-		lst->start = cursor->next;
+	value = node->value;
+	if (node->prev == NULL) {
+		lst->start = node->next;
 	} else {
-		cursor->prev->next = cursor->next;
+		node->prev->next = node->next;
 	}
 
-	if (cursor->next == NULL) {
-		lst->end = cursor->prev;
+	if (node->next == NULL) {
+		lst->end = node->prev;
 	} else {
-		cursor->next->prev = cursor->prev;
+		node->next->prev = node->prev;
 	}
 
 	lst->len--;
+	list_node_free(node, NULL);
 
-	list_node_free(cursor, NULL);
 	return value;
+}
+
+void *list_remove_val(list *lst, void *value, int (*is_eq)(void *a, void *b))
+{
+	return list_remove_node(lst, list_find_node(lst, value, is_eq));
 }

@@ -19,7 +19,6 @@ typedef struct array array;
 typedef struct list list;
 typedef struct map map;
 
-
 int    array_add             (array *arr, void *value);
 array *array_alloc_capacity  (size_t initial_capacity);
 void   array_clear           (array *arr);
@@ -34,6 +33,7 @@ int    array_trim_capacity   (array *arr);
 
 list  *list_alloc     (void);
 int    list_append    (list *lst, void *value);
+void **list_find      (list *lst, void *value, int (*is_eq)(void *a, void *b));
 void   list_free_full (list *lst, void (*free_value)(void *value));
 int    list_insert    (list *lst, size_t i, void *value);
 size_t list_len       (list *lst);
@@ -44,6 +44,7 @@ void  *list_pop       (list *lst);
 void  *list_pop_left  (list *lst);
 int    list_prepend   (list *lst, void *value);
 void  *list_remove_at (list *lst, size_t i);
+void  *list_remove_val(list *lst, void *value, int (*is_eq)(void *a, void *b));
 
 map *map_alloc_capacity        (size_t (*hash_fn)(void* key),
 				int (*key_eq)(void *key_a, void*key_b),
@@ -55,6 +56,9 @@ void map_free_full             (map *mp,
 void *map_get              (map *mp, void *key);
 void *map_remove           (map *mp, void *key);
 void *map_set              (map *mp, void *key, void *value);
+
+int ptr_eq(void *a, void *b);
+int str_eq(void *a, void *b);
 
 #define array_alloc()       (array_alloc_capacity(0))
 #define array_free(A)       (array_free_full((A), NULL))
