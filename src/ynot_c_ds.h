@@ -13,9 +13,12 @@ enum ynot_error {
 
 struct array;
 struct list;
+struct map;
 
 typedef struct array array;
 typedef struct list list;
+typedef struct map map;
+
 
 int    array_add             (array *arr, void *value);
 array *array_alloc_capacity  (size_t initial_capacity);
@@ -42,8 +45,21 @@ void  *list_pop_left  (list *lst);
 int    list_prepend   (list *lst, void *value);
 void  *list_remove_at (list *lst, size_t i);
 
+map *map_alloc_capacity    (size_t (*hash_fn)(void* key),
+							int (*key_eq)(void *key_a, void*key_b),
+							size_t initial_capacity);
+void map_clear             (map *mp);
+void map_free_full         (map *mp,
+							void (*free_key)(void *key),
+							void (*free_value)(void *value));
+void *map_get              (map *mp, void *key);
+void *map_remove           (map *mp, void *key);
+void *map_set              (map *mp, void *key, void *value);
+
 #define array_alloc()       (array_alloc_capacity(0))
 #define array_free(A)       (array_free_full((A), NULL))
 #define list_free(L)        (list_free_full((L), NULL))
+#define map_alloc(HASH,EQ)  (map_alloc_capacity((HASH), (EQ), 0))
+#define map_free(MP)        (map_free_full((MP), NULL, NULL))
 
 #endif /* YNOT_C_DS_H */
