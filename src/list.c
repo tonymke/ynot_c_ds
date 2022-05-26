@@ -120,6 +120,32 @@ size_t list_len(list *lst)
 	return lst->len;
 }
 
+struct list_node *list_node_alloc(void *value)
+{
+	static const struct list_node new_value = { NULL, NULL, NULL };
+
+	struct list_node *node;
+	node = malloc(sizeof(*node));
+	if (node == NULL) {
+		perror("list_node_alloc: malloc");
+		return NULL;
+	}
+
+	*node = new_value;
+	node->value = value;
+
+	return node;
+}
+
+void list_node_free(struct list_node *node, void (*free_value)(void *value))
+{
+	if (node != NULL && free_value != NULL) {
+		free_value(node->value);
+	}
+
+	free(node);
+}
+
 void *list_peek(list *lst)
 {
 	if (lst == NULL) {
@@ -127,11 +153,6 @@ void *list_peek(list *lst)
 	}
 
 	return list_peek_at(lst, lst->len - 1);
-}
-
-void *list_peek_left(list *lst)
-{
-	return list_peek_at(lst, 0);
 }
 
 void *list_peek_at(list *lst, size_t i)
@@ -172,30 +193,9 @@ struct list_node *list_peek_at_node(list* lst, size_t i)
 	return cursor;
 }
 
-struct list_node *list_node_alloc(void *value)
+void *list_peek_left(list *lst)
 {
-	static const struct list_node new_value = { NULL, NULL, NULL };
-
-	struct list_node *node;
-	node = malloc(sizeof(*node));
-	if (node == NULL) {
-		perror("list_node_alloc: malloc");
-		return NULL;
-	}
-
-	*node = new_value;
-	node->value = value;
-
-	return node;
-}
-
-void list_node_free(struct list_node *node, void (*free_value)(void *value))
-{
-	if (node != NULL && free_value != NULL) {
-		free_value(node->value);
-	}
-
-	free(node);
+	return list_peek_at(lst, 0);
 }
 
 void *list_pop(list *lst)
