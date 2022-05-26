@@ -213,7 +213,11 @@ void *list_pop_left(list *lst)
 
 int list_prepend(list *lst, void *value)
 {
+	/* GCC 12.1's analyzer has a false positive here. */
+	#pragma GCC diagnostic push
+	#pragma GCC diagnostic ignored "-Wanalyzer-malloc-leak"
 	return list_insert(lst, 0, value);
+	#pragma GCC diagnostic pop
 }
 
 void *list_remove_at(list *lst, size_t i)
