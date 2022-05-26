@@ -17,11 +17,9 @@ struct list_node {
 	struct list_node *next;
 };
 
-static struct list_node *list_node_alloc   (void *value);
-static void              list_node_free    (
-						struct list_node *node,
-						void (*free_value)(void *value)
-						);
+static struct list_node *list_node_alloc       (void *value);
+static void              list_node_free        (struct list_node *node,
+						void (*free_value)(void *val));
 static struct list_node *list_peek_at_node (list* lst, size_t i);
 
 list *list_alloc(void)

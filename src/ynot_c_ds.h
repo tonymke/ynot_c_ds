@@ -45,13 +45,13 @@ void  *list_pop_left  (list *lst);
 int    list_prepend   (list *lst, void *value);
 void  *list_remove_at (list *lst, size_t i);
 
-map *map_alloc_capacity    (size_t (*hash_fn)(void* key),
-							int (*key_eq)(void *key_a, void*key_b),
-							size_t initial_capacity);
-void map_clear             (map *mp);
-void map_free_full         (map *mp,
-							void (*free_key)(void *key),
-							void (*free_value)(void *value));
+map *map_alloc_capacity        (size_t (*hash_fn)(void* key),
+				int (*key_eq)(void *key_a, void*key_b),
+				size_t initial_capacity);
+void map_clear                 (map *mp);
+void map_free_full             (map *mp,
+				void (*free_key)(void *key),
+				void (*free_value)(void *value));
 void *map_get              (map *mp, void *key);
 void *map_remove           (map *mp, void *key);
 void *map_set              (map *mp, void *key, void *value);
