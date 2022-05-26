@@ -2,7 +2,6 @@
 
 export CFLAGS="   \
 -ansi             \
--fanalyzer        \
 -g                \
 -Og               \
 -pedantic         \
