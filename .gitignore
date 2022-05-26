@@ -10,6 +10,7 @@
 config.h
 libtool
 ynot_c_ds-*.*.tar.gz
+tests/check_ynot_c_ds
 
 # Created by https://www.toptal.com/developers/gitignore/api/autotools+strict
 # Edit at https://www.toptal.com/developers/gitignore?templates=autotools+strict
