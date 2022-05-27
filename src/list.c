@@ -1,21 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "list.h"
 #include "ynot_c_ds.h"
-
-struct list {
-	size_t len;
-
-	struct list_node *start;
-	struct list_node *end;
-};
-
-struct list_node {
-	void *value;
-
-	struct list_node *prev;
-	struct list_node *next;
-};
 
 static struct list_node *list_find_node        (list *lst,
 						void *value,

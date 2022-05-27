@@ -53,9 +53,9 @@ void map_clear                 (map *mp);
 void map_free_full             (map *mp,
 				void (*free_key)(void *key),
 				void (*free_value)(void *value));
-void *map_get              (map *mp, void *key);
-void *map_remove           (map *mp, void *key);
-void *map_set              (map *mp, void *key, void *value);
+void *map_get                  (map *mp, void *key);
+void *map_remove               (map *mp, void *key);
+void *map_set                  (map *mp, void *key, void *value);
 
 int ptr_eq(void *a, void *b);
 int str_eq(void *a, void *b);
