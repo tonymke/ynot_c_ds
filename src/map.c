@@ -43,7 +43,7 @@ struct map_get_node_result {
 static struct map_get_node_result  map_get_node        (map *mp, void *key);
 
 map *map_alloc_capacity(size_t (*hash_fn)(void* key),
-			int (*key_eq_fn)(void *key_a, void*key_b),
+			int (*key_eq_fn)(void *key_a, void *key_b),
 			size_t initial_capacity)
 {
 	int err;
