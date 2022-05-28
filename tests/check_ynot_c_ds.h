@@ -9,5 +9,6 @@ typedef TCase *(*test_case_factory)();
 TCase *array_case(void);
 TCase *list_case(void);
 TCase *map_case(void);
+TCase *queue_case(void);
 
 #endif /* YNOT_C_DS_CHECK_H */

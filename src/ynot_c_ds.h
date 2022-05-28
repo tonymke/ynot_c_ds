@@ -14,10 +14,12 @@ enum ynot_error {
 struct array;
 struct list;
 struct map;
+struct queue;
 
 typedef struct array array;
 typedef struct list list;
 typedef struct map map;
+typedef struct queue queue;
 
 int    array_add             (array *arr, void *value);
 array *array_alloc_capacity  (size_t initial_capacity);
@@ -48,10 +50,10 @@ int    list_prepend   (list *lst, void *value);
 void  *list_remove_at (list *lst, size_t i);
 void  *list_remove_val(list *lst, void *value, int (*is_eq)(void *a, void *b));
 
-map   *map_alloc_capacity      (size_t (*hash_fn)(void* key),
+map    *map_alloc_capacity     (size_t (*hash_fn)(void* key),
 				int (*key_eq)(void *key_a, void*key_b),
 				size_t initial_capacity);
-void   map_free_full           (map *mp,
+void    map_free_full          (map *mp,
 				void (*free_key)(void *key),
 				void (*free_value)(void *value));
 int     map_ensure_capacity    (map *mp, size_t min_capacity);
@@ -61,6 +63,20 @@ void   *map_remove             (map *mp, void *key);
 void   *map_set                (map *mp, void *key, void *value);
 
 int ptr_eq(void *a, void *b);
+
+queue *queue_alloc     (size_t max_size, void (*free_value)(void *value));
+int    queue_append    (queue *q, void *value);
+void **queue_find      (queue *q, void *value, int (*is_eq)(void *a, void *b));
+void   queue_free      (queue *q);
+size_t queue_len       (queue *q);
+size_t queue_max_size  (queue *q);
+void  *queue_peek      (queue *q);
+void  *queue_peek_at   (queue *q, size_t i);
+void  *queue_peek_left (queue *q);
+void  *queue_pop       (queue *q);
+void  *queue_pop_left  (queue *q);
+int    queue_prepend   (queue *q, void *value);
+
 int str_eq(void *a, void *b);
 
 #define array_alloc()  (array_alloc_capacity(0))
