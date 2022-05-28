@@ -31,6 +31,8 @@ void  *array_remove_at       (array *arr, size_t i);
 void  *array_set             (array *arr, size_t i, void *value);
 int    array_trim_capacity   (array *arr);
 
+size_t hash_str_djb2 (void *str);
+
 list  *list_alloc     (void);
 int    list_append    (list *lst, void *value);
 void **list_find      (list *lst, void *value, int (*is_eq)(void *a, void *b));
@@ -46,24 +48,25 @@ int    list_prepend   (list *lst, void *value);
 void  *list_remove_at (list *lst, size_t i);
 void  *list_remove_val(list *lst, void *value, int (*is_eq)(void *a, void *b));
 
-map *map_alloc_capacity        (size_t (*hash_fn)(void* key),
+map   *map_alloc_capacity      (size_t (*hash_fn)(void* key),
 				int (*key_eq)(void *key_a, void*key_b),
 				size_t initial_capacity);
-void map_clear                 (map *mp);
-void map_free_full             (map *mp,
+void   map_free_full           (map *mp,
 				void (*free_key)(void *key),
 				void (*free_value)(void *value));
-void *map_get                  (map *mp, void *key);
-void *map_remove               (map *mp, void *key);
-void *map_set                  (map *mp, void *key, void *value);
+int     map_ensure_capacity    (map *mp, size_t min_capacity);
+void   *map_get                (map *mp, void *key);
+size_t  map_len                (map *mp);
+void   *map_remove             (map *mp, void *key);
+void   *map_set                (map *mp, void *key, void *value);
 
 int ptr_eq(void *a, void *b);
 int str_eq(void *a, void *b);
 
-#define array_alloc()       (array_alloc_capacity(0))
-#define array_free(A)       (array_free_full((A), NULL))
-#define list_free(L)        (list_free_full((L), NULL))
-#define map_alloc(HASH,EQ)  (map_alloc_capacity((HASH), (EQ), 0))
-#define map_free(MP)        (map_free_full((MP), NULL, NULL))
+#define array_alloc()  (array_alloc_capacity(0))
+#define array_free(A)  (array_free_full((A), NULL))
+#define list_free(L)   (list_free_full((L), NULL))
+#define map_alloc(H,E) (map_alloc_capacity((H), (E), 0))
+#define map_free(MP)   (map_free_full((MP), NULL, NULL))
 
 #endif /* YNOT_C_DS_H */

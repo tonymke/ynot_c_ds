@@ -2,6 +2,24 @@
 
 #include "ynot_c_ds.h"
 
+size_t hash_str_djb2(void *key)
+{
+	/*
+	 * Taken from http://www.cse.yorku.ca/~oz/hash.html
+	 * Originated from a comp.lang.c post - assuming fair use.
+	 * https://groups.google.com/g/comp.lang.c/c/lSKWXiuNOAk/m/zstZ3SRhCjgJ
+	 */
+	unsigned char *str = (unsigned char *)key;
+	size_t hash = 5381;
+	unsigned char c;
+
+	while ((c = *str++)) {
+		hash = ((hash << 5) + hash) + c;
+	}
+
+	return hash;
+}
+
 size_t next_power_of_2(size_t x)
 {
 	static const size_t metasize = sizeof(metasize) * 8 / 2;

@@ -3,6 +3,7 @@ check_PROGRAMS = check_ynot_c_ds
 check_ynot_c_ds_SOURCES =                   \
 						  check_array.c     \
 						  check_list.c      \
+						  check_map.c       \
 						  check_ynot_c_ds.h \
 						  check_ynot_c_ds.c \
 						  ynot_c_ds.h

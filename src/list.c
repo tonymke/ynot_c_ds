@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "list.h"
+#include "common.h"
 #include "ynot_c_ds.h"
 
 static struct list_node *list_find_node        (list *lst,
@@ -11,8 +11,6 @@ static struct list_node *list_node_alloc       (void *value);
 static void              list_node_free        (struct list_node *node,
 						void (*free_value)(void *val));
 static struct list_node *list_peek_at_node     (list* lst, size_t i);
-static void             *list_remove_node      (list *lst,
-						struct list_node *node);
 
 list *list_alloc(void)
 {
@@ -241,7 +239,6 @@ void *list_remove_at(list *lst, size_t i)
 {
 	return list_remove_node(lst, list_peek_at_node(lst, i));
 }
-
 
 void *list_remove_node(list *lst, struct list_node *node)
 {

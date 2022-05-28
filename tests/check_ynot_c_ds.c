@@ -10,13 +10,13 @@ int apply_test_case_factory(Suite *suite, test_case_factory tcf)
 	TCase *tc;
 
 	if (suite == NULL) {
-		fprintf(stderr, "apply_test_case_factory: null suite");
+		fprintf(stderr, "apply_test_case_factory: null suite\n");
 		return 0;
 	}
 
 	tc = tcf();
 	if (tc == NULL) {
-		fprintf(stderr, "apply_test_case_factory: tcase create");
+		fprintf(stderr, "apply_test_case_factory: tcase create\n");
 		return 0;
 	}
 
@@ -36,12 +36,12 @@ int main()
 
 	suite = suite_create("ynot_c_ds");
 	if (suite == NULL) {
-		fprintf(stderr, "main: suite_create failed");
+		fprintf(stderr, "main: suite_create failed\n");
 		return EXIT_FAILURE;
 	}
 	runner = srunner_create(suite);
 	if (runner == NULL) {
-		fprintf(stderr, "main: srunner_create failed");
+		fprintf(stderr, "main: srunner_create failed\n");
 		return EXIT_FAILURE;
 	}
 

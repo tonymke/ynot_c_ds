@@ -2,6 +2,7 @@
 
 #include <check.h>
 
+#include "check_ynot_c_ds.h"
 #include "ynot_c_ds.h"
 
 START_TEST(test_add_insert)
