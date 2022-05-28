@@ -6,7 +6,7 @@ A data structures library written in C written as a refresher on the language.
 
 - [x] list (doubly linked list)
 - [x] array (dynamic array)
-- [ ] map (hashmap)
+- [x] map (hashmap)
 - [ ] queue (fixed-size array)
 - [ ] priority queue (heap)
 - [ ] trie
