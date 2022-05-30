@@ -12,7 +12,6 @@ START_TEST(test_alloc_free)
 
 	a = 'a';
 	b = malloc(sizeof(*b));
-	/* GCC's static analyzer doesn't see the abort in this.*/
 	ck_assert_ptr_nonnull(b);
 	*b = 'b';
 
