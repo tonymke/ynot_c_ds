@@ -189,6 +189,22 @@ void *array_set(array *arr, size_t i, void *value)
 	return replaced;
 }
 
+void array_swap(array *arr, size_t a_i, size_t b_i)
+{
+	if (arr == NULL) {
+		return;
+	}
+
+	if (a_i >= arr->len || b_i >= arr->len || a_i == b_i) {
+		return;
+	}
+
+	{
+		void *buf = array_set(arr, a_i, array_get(arr, b_i));
+		array_set(arr, b_i, buf);
+	}
+}
+
 int array_trim_capacity(array *arr)
 {
 	void *new_data;

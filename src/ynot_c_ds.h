@@ -31,6 +31,7 @@ int    array_insert          (array *arr, size_t i, void *value);
 size_t array_len             (array *arr);
 void  *array_remove_at       (array *arr, size_t i);
 void  *array_set             (array *arr, size_t i, void *value);
+void   array_swap            (array *arr, size_t a_i, size_t b_i);
 int    array_trim_capacity   (array *arr);
 
 size_t hash_str_djb2 (void *str);

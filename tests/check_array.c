@@ -151,6 +151,35 @@ START_TEST(test_set)
 }
 END_TEST
 
+START_TEST(test_swap)
+{
+	array *arr;
+	int a, b;
+	a = 10;
+	b = 20;
+
+	arr = array_alloc();
+	ck_assert_ptr_nonnull(arr);
+
+	array_add(arr, &a);
+	array_add(arr, &b);
+
+	array_swap(arr, 999, 0);
+	ck_assert_ptr_eq(&a, array_get(arr, 0));
+	ck_assert_ptr_eq(&b, array_get(arr, 1));
+
+	array_swap(arr, 0, 999);
+	ck_assert_ptr_eq(&a, array_get(arr, 0));
+	ck_assert_ptr_eq(&b, array_get(arr, 1));
+
+	array_swap(arr, 0, 1);
+	ck_assert_ptr_eq(&b, array_get(arr, 0));
+	ck_assert_ptr_eq(&a, array_get(arr, 1));
+
+	array_free(arr);
+}
+END_TEST
+
 START_TEST(test_trim_capacity)
 {
 	int err;
@@ -197,6 +226,7 @@ TCase *array_case(void)
 	tcase_add_test(tc, test_clear);
 	tcase_add_test(tc, test_remove_at);
 	tcase_add_test(tc, test_set);
+	tcase_add_test(tc, test_swap);
 	tcase_add_test(tc, test_trim_capacity);
 
 	return tc;
