@@ -83,6 +83,8 @@ START_TEST(test_find_str)
 	ck_assert_ptr_eq(&b, *(list_find(lst, &b, str_eq)));
 	ck_assert_ptr_eq(&c, *(list_find(lst, &c, str_eq)));
 	ck_assert_ptr_null(list_find(lst, &d, str_eq));
+
+	list_free(lst);
 }
 END_TEST
 
