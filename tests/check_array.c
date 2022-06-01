@@ -82,6 +82,8 @@ START_TEST(test_clear)
 
 	array_clear(arr);
 	ck_assert_uint_eq(0L, array_len(arr));
+
+	array_free(arr);
 }
 END_TEST
 
