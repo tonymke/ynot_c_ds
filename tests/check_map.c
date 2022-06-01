@@ -52,6 +52,8 @@ START_TEST(test_automatic_capacity_adjustment)
 	}
 	ck_assert_uint_eq(0, map_len(mp));
 	map_free_full(mp, free, free);
+	free(keys);
+	free(values);
 }
 END_TEST
 
