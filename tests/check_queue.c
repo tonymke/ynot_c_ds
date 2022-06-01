@@ -7,24 +7,27 @@
 
 START_TEST(test_alloc_free)
 {
-	char a, *b;
+	char *a, *b;
 	queue *q;
 
-	a = 'a';
+	a = malloc(sizeof(*a));
+	ck_assert_ptr_nonnull(a);
+	*a = 'a';
+
 	b = malloc(sizeof(*b));
 	ck_assert_ptr_nonnull(b);
 	*b = 'b';
 
-	q = queue_alloc(5, NULL);
+	q = queue_alloc(5, free);
 	ck_assert_ptr_nonnull(q);
 	queue_free(q);
 
-	q = queue_alloc(5, NULL);
+	q = queue_alloc(5, free);
 	ck_assert_ptr_nonnull(q);
 	ck_assert_int_eq(YNOT_OK, queue_append(q, &a));
 	queue_free(q);
 
-	q = queue_alloc(5, NULL);
+	q = queue_alloc(5, free);
 	ck_assert_ptr_nonnull(q);
 	ck_assert_int_eq(YNOT_OK, queue_append(q, b));
 	/* rely on valgrind as our "assertion" here */
