@@ -20,6 +20,7 @@ typedef struct array array;
 typedef struct list list;
 typedef struct map map;
 typedef struct queue queue;
+typedef struct array pqueue;
 
 int    array_add             (array *arr, void *value);
 array *array_alloc_capacity  (size_t initial_capacity);
@@ -63,6 +64,11 @@ size_t  map_len                (map *mp);
 void   *map_remove             (map *mp, void *key);
 void   *map_set                (map *mp, void *key, void *value);
 
+void  pqueue_free_full(pqueue *pq, void (*free_value)(void *value));
+int   pqueue_push     (pqueue *pq, int priority, void *val);
+void *pqueue_peek     (pqueue *pq);
+void *pqueue_pop      (pqueue *pq);
+
 int ptr_eq(void *a, void *b);
 
 queue *queue_alloc     (size_t max_size, void (*free_value)(void *value));
@@ -80,10 +86,14 @@ int    queue_prepend   (queue *q, void *value);
 
 int str_eq(void *a, void *b);
 
-#define array_alloc()  (array_alloc_capacity(0))
-#define array_free(A)  (array_free_full((A), NULL))
-#define list_free(L)   (list_free_full((L), NULL))
-#define map_alloc(H,E) (map_alloc_capacity((H), (E), 0))
-#define map_free(MP)   (map_free_full((MP), NULL, NULL))
+#define array_alloc()                   (array_alloc_capacity(0))
+#define array_free(A)                   (array_free_full((A), NULL))
+#define list_free(L)                    (list_free_full((L), NULL))
+#define map_alloc(H,E)                  (map_alloc_capacity((H), (E), 0))
+#define map_free(MP)                    (map_free_full((MP), NULL, NULL))
+#define pqueue_alloc()                  (array_alloc())
+#define pqueue_free(PQ)                 (pqueue_free_full((PQ), NULL))
+#define pqueue_len(PQ)                  (array_len((PQ)))
+#define pqueue_trim_capacity(PQ)        (array_trim_capacity((PQ)))
 
 #endif /* YNOT_C_DS_H */

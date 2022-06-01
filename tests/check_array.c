@@ -218,7 +218,7 @@ END_TEST
 
 TCase *array_case(void)
 {
-	TCase *tc = tcase_create("suite");
+	TCase *tc = tcase_create("array");
 	if (tc == NULL) {
 		return NULL;
 	}

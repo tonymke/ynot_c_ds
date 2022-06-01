@@ -59,9 +59,9 @@ START_TEST(test_insert)
 	ck_assert_uint_eq(1, queue_len(q));
 	ck_assert_ptr_eq(a, queue_peek(q));
 
-	ck_assert_int_eq(YNOT_OK, queue_prepend(q, &b));
+	ck_assert_int_eq(YNOT_OK, queue_prepend(q, b));
 	ck_assert_uint_eq(1, queue_len(q));
-	ck_assert_ptr_eq(&b, queue_peek(q));
+	ck_assert_ptr_eq(b, queue_peek(q));
 
 	queue_free(q);
 }

@@ -8,7 +8,7 @@ A data structures library written in C written as a refresher on the language.
 - [x] array (dynamic array)
 - [x] map (hashmap)
 - [x] queue (length-bound doubly linked list)
-- [ ] priority queue (heap)
+- [x] priority queue (max heap)
 - [ ] trie
 
 ## License
