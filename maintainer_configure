@@ -11,4 +11,4 @@ export CFLAGS="   \
 -Wextra           \
 "
 
-exec ./configure $@
+exec ./configure --enable-valgrind $@
