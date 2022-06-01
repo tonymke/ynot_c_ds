@@ -22,6 +22,7 @@ START_TEST(test_alloc_free)
 	ck_assert_ptr_nonnull(mp);
 	ck_assert_uint_eq(0, map_len(mp));
 	map_free(mp);
+
 }
 END_TEST
 
@@ -81,6 +82,8 @@ START_TEST(test_get_set_remove)
 	ck_assert_ptr_nonnull(buf);
 	ck_assert_str_eq(buf, val);
 	ck_assert_uint_eq(0, map_len(mp));
+	free(buf);
+	free(key);
 
 	map_free_full(mp, free, free);
 }
