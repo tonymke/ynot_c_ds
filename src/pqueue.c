@@ -44,7 +44,7 @@ void pqueue_free_full(pqueue *pq, void (*free_value)(void *value))
 			free(node);
 		}
 	}
-	free(pq);
+	array_free(pq);
 }
 
 void *pqueue_peek(pqueue *pq)
