@@ -55,6 +55,8 @@ START_TEST(test_find_ptr)
 	ck_assert_ptr_eq(&b, *(list_find(lst, &b, ptr_eq)));
 	ck_assert_ptr_eq(&c, *(list_find(lst, &c, ptr_eq)));
 	ck_assert_ptr_null(list_find(lst, &d, ptr_eq));
+
+	list_free(lst);
 }
 END_TEST
 
