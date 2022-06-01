@@ -24,7 +24,7 @@ START_TEST(test_alloc_free)
 
 	q = queue_alloc(5, free);
 	ck_assert_ptr_nonnull(q);
-	ck_assert_int_eq(YNOT_OK, queue_append(q, &a));
+	ck_assert_int_eq(YNOT_OK, queue_append(q, a));
 	queue_free(q);
 
 	q = queue_alloc(5, free);
