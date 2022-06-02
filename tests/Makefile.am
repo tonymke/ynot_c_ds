@@ -10,6 +10,7 @@ check_ynot_c_ds_SOURCES =   check_array.c     \
 							check_map.c       \
 							check_queue.c     \
 							check_pqueue.c    \
+							check_ptrie.c     \
 							check_ynot_c_ds.h \
 							check_ynot_c_ds.c \
 							$(top_srcdir)/src/ynot_c_ds.h

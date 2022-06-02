@@ -15,12 +15,14 @@ struct array;
 struct list;
 struct map;
 struct queue;
+struct ptrie;
 
 typedef struct array array;
 typedef struct list list;
 typedef struct map map;
 typedef struct queue queue;
 typedef struct array pqueue;
+typedef struct ptrie ptrie;
 
 int    array_add             (array *arr, void *value);
 array *array_alloc_capacity  (size_t initial_capacity);
@@ -70,6 +72,12 @@ void *pqueue_peek     (pqueue *pq);
 void *pqueue_pop      (pqueue *pq);
 
 int ptr_eq(void *a, void *b);
+
+ptrie *ptrue_alloc     (void);
+void   ptrie_free      (ptrie *tri);
+int    ptrie_add       (ptrie *tri, char *value);
+int    ptrie_contains  (ptrie *tri, char *value);
+int    ptrie_remove    (ptrie *tri, char *value);
 
 queue *queue_alloc     (size_t max_size, void (*free_value)(void *value));
 int    queue_append    (queue *q, void *value);
