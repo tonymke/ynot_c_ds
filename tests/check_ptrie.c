@@ -8,6 +8,10 @@
 START_TEST(test_alloc_free)
 {
 	ptrie *tri = ptrie_alloc();
+	ck_assert_int_eq(YNOT_OK, ptrie_add(tri, "foo"));
+	ck_assert_int_eq(YNOT_OK, ptrie_add(tri, "foo_foobar"));
+	ck_assert_int_eq(YNOT_OK, ptrie_add(tri, "barbaz"));
+	ck_assert_int_eq(YNOT_OK, ptrie_add(tri, "bar"));
 	ptrie_free(tri);
 }
 END_TEST

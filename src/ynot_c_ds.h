@@ -73,9 +73,9 @@ void *pqueue_pop      (pqueue *pq);
 int ptr_eq(void *a, void *b);
 
 void   ptrie_free      (ptrie *tri);
-int    ptrie_add       (ptrie *tri, char *value);
+int    ptrie_add       (ptrie *tri, char *pfx);
 int    ptrie_contains  (ptrie *tri, char *value);
-int    ptrie_remove    (ptrie *tri, char *value);
+int    ptrie_remove    (ptrie *tri, char *pfx);
 
 queue *queue_alloc     (size_t max_size, void (*free_value)(void *value));
 int    queue_append    (queue *q, void *value);
