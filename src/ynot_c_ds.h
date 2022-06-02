@@ -15,14 +15,13 @@ struct array;
 struct list;
 struct map;
 struct queue;
-struct ptrie;
 
 typedef struct array array;
 typedef struct list list;
 typedef struct map map;
 typedef struct queue queue;
 typedef struct array pqueue;
-typedef struct ptrie ptrie;
+typedef struct array ptrie;
 
 int    array_add             (array *arr, void *value);
 array *array_alloc_capacity  (size_t initial_capacity);
@@ -73,7 +72,6 @@ void *pqueue_pop      (pqueue *pq);
 
 int ptr_eq(void *a, void *b);
 
-ptrie *ptrue_alloc     (void);
 void   ptrie_free      (ptrie *tri);
 int    ptrie_add       (ptrie *tri, char *value);
 int    ptrie_contains  (ptrie *tri, char *value);
@@ -103,5 +101,6 @@ int str_eq(void *a, void *b);
 #define pqueue_free(PQ)                 (pqueue_free_full((PQ), NULL))
 #define pqueue_len(PQ)                  (array_len((PQ)))
 #define pqueue_trim_capacity(PQ)        (array_trim_capacity((PQ)))
+#define ptrie_alloc(TRI)                (array_alloc())
 
 #endif /* YNOT_C_DS_H */

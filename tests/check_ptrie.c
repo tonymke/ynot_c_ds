@@ -7,7 +7,8 @@
 
 START_TEST(test_alloc_free)
 {
-	/* TODO */
+	ptrie *tri = ptrie_alloc();
+	ptrie_free(tri);
 }
 END_TEST
 
