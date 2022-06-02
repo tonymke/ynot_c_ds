@@ -14,7 +14,7 @@ struct node {
 
 static struct node *node_add(struct node *nd, char *pfx, size_t pfx_n);
 static struct node *node_alloc(char *pfx, size_t pfx_n, int is_terminating);
-/*static struct node *node_contains (struct node *nd, char *v, size_t v_n);*/
+static struct node *node_contains (struct node *nd, char *v, size_t v_n);
 static void         node_free (struct node *nd);
 static void         node_free_generic (void *nd);
 /*static int          node_remove (struct node *nd, char *v, size_t v_n);*/
@@ -205,6 +205,31 @@ struct node *node_alloc(char *pfx, size_t pfx_n, int is_terminating)
 	return nd;
 }
 
+struct node *node_contains(struct node *nd, char *v, size_t v_n)
+{
+	size_t i;
+	size_t match_n = prefix_match_len(v, v_n, nd->prefix, nd->prefix_len);
+	/* If the full prefix isn't in val, we are not a match */
+	if (match_n < nd->prefix_len) {
+		return NULL;
+	}
+	/* If we're terminating, we're a match */
+	if (nd->is_terminating) {
+		return nd;
+	}
+
+	/* If we're not terminating, inspect further into the branch */
+	for (i = 0; i < array_len(nd->edges); i++) {
+		struct node *edge = array_get(nd->edges, i);
+		edge = node_contains(edge, &v[match_n], v_n - match_n);
+		if (edge != NULL) {
+			return edge;
+		}
+	}
+
+	return NULL;
+}
+
 void node_free(struct node *nd)
 {
 	if (nd == NULL) {
@@ -256,6 +281,29 @@ int ptrie_add(ptrie *tri, char *pfx)
 	}
 
 	return YNOT_OK;
+}
+
+int ptrie_contains(ptrie *tri, char *value)
+{
+	size_t i, val_n;
+
+	if (tri == NULL || value == NULL) {
+		return 0;
+	}
+
+	val_n = strlen(value);
+	if (val_n == 0) {
+		return 0;
+	}
+
+	for (i = 0; i < array_len(tri); i++) {
+		struct node *nd = array_get(tri, i);
+		if (node_contains(nd, value, val_n)) {
+			return 1;
+		}
+	}
+
+	return 0;
 }
 
 void ptrie_free(ptrie *tri)
