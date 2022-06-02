@@ -9,7 +9,7 @@ A data structures library written in C written as a refresher on the language.
 - [x] map (hashmap)
 - [x] queue (length-bound doubly linked list)
 - [x] priority queue (max heap)
-- [ ] trie
+- [x] prefix trie (radix tree)
 
 ## License
 
