@@ -4,6 +4,12 @@
 
 #include "ynot_c_ds.h"
 
+struct node;
+
+struct match {
+	struct node *parent, *node;
+};
+
 struct node {
 	char *prefix;
 	size_t prefix_len;
@@ -12,33 +18,27 @@ struct node {
 	array *edges;
 };
 
-static struct node *node_add(struct node *nd, char *pfx, size_t pfx_n);
-static struct node *node_alloc(char *pfx, size_t pfx_n, int is_terminating);
-static struct node *node_contains (struct node *nd, char *v, size_t v_n);
-static void         node_free (struct node *nd);
-static void         node_free_generic (void *nd);
-/*static int          node_remove (struct node *nd, char *v, size_t v_n);*/
-static size_t       prefix_match_len(char *a, size_t a_n, char *b, size_t b_n);
-
-size_t prefix_match_len(char *a, size_t a_n, char *b, size_t b_n)
-{
-	size_t i, min_n;
-	if (a == NULL || a_n == 0 || b == NULL || b_n == 0) {
-		return 0;
-	}
-
-	i = 0;
-	min_n = a_n <= b_n ? a_n : b_n;
-
-	while (i < min_n) {
-		if (a[i] != b[i]) {
-			break;
-		}
-		i++;
-	}
-
-	return i;
-}
+static struct node  *node_add                  (struct node *nd,
+						char *pfx,
+						size_t pfx_n);
+static struct node  *node_alloc                (char *pfx,
+						size_t pfx_n,
+						int is_terminating);
+static struct node  *node_contains             (struct node *nd,
+						char *v,
+						size_t v_n);
+static struct match  node_contains_exact       (struct node *p,
+						struct node *nd,
+						char *v,
+						size_t v_n);
+static void          node_free                 (struct node *nd);
+static void          node_free_generic         (void *nd);
+static int           node_merge_with_child     (struct node *parent,
+						struct node *child);
+static size_t        prefix_match_len          (char *a,
+						size_t a_n,
+						char *b,
+						size_t b_n);
 
 struct node *node_add(struct node *nd, char *pfx, size_t pfx_n)
 {
@@ -230,6 +230,53 @@ struct node *node_contains(struct node *nd, char *v, size_t v_n)
 	return NULL;
 }
 
+struct match node_contains_exact       (struct node *p,
+					struct node *nd,
+					char *v,
+					size_t v_n)
+{
+	size_t i, match_n;
+	struct match res = { NULL, NULL };
+	res.parent = p;
+
+	if (nd == NULL || v == NULL || v_n == 0) {
+		return res;
+	}
+
+	match_n = prefix_match_len(v, v_n, nd->prefix, nd->prefix_len);
+
+	/* If the full prefix isn't in val, we are not a match */
+	if (match_n < nd->prefix_len) {
+		return res;
+	}
+
+	/* If we're terminating and an exact match, we're the match */
+	if (match_n == nd->prefix_len && match_n == v_n) {
+		if (nd->is_terminating) {
+			res.node = nd;
+			return res;
+		} else {
+			return res;
+		}
+	}
+
+	/* inspect further into the branch */
+	res.parent = nd;
+	for (i = 0; i < array_len(nd->edges); i++) {
+		res.node = array_get(nd->edges, i);
+		res = node_contains_exact(
+				nd,
+				res.node,
+				&v[match_n],
+				v_n - match_n);
+		if (res.node != NULL) {
+			return res;
+		}
+	}
+
+	return res;
+}
+
 void node_free(struct node *nd)
 {
 	if (nd == NULL) {
@@ -244,6 +291,65 @@ void node_free(struct node *nd)
 void node_free_generic(void *nd)
 {
 	node_free((struct node *)nd);
+}
+int node_merge_with_child(struct node *parent, struct node *child)
+{
+	size_t i;
+	char *buf;
+	if (parent == NULL || child == NULL) {
+		return YNOT_EINVALIDPARAM;
+	}
+
+	buf = malloc(sizeof(*buf)
+			* (parent->prefix_len + child->prefix_len + 1));
+	if (buf == NULL) {
+		perror("node_merge_with_child: buf malloc");
+		return YNOT_ENOMEM;
+	}
+	strcpy(buf, parent->prefix);
+	strcat(buf, child->prefix);
+	free(parent->prefix);
+	parent->prefix = buf;
+	parent->prefix_len += child->prefix_len;
+	parent->is_terminating = child->is_terminating;
+	/* remove child from parent's edges array */
+	for (i = 0; i < array_len(parent->edges); i++) {
+		struct node *nd = array_get(parent->edges, i);
+		if (nd == child) {
+			array_remove_at(parent->edges, i);
+			break;
+		}
+	}
+
+	/* Add grandchildren children into parent's edge's array */
+	while (array_len(child->edges) > 0) {
+		struct node *grandchild = array_get(child->edges, 0);
+		array_remove_at(child->edges, 0);
+		array_add(parent->edges, grandchild);
+	}
+	node_free(child);
+
+	return YNOT_OK;
+}
+
+size_t prefix_match_len(char *a, size_t a_n, char *b, size_t b_n)
+{
+	size_t i, min_n;
+	if (a == NULL || a_n == 0 || b == NULL || b_n == 0) {
+		return 0;
+	}
+
+	i = 0;
+	min_n = a_n <= b_n ? a_n : b_n;
+
+	while (i < min_n) {
+		if (a[i] != b[i]) {
+			break;
+		}
+		i++;
+	}
+
+	return i;
 }
 
 int ptrie_add(ptrie *tri, char *pfx)
@@ -309,4 +415,76 @@ int ptrie_contains(ptrie *tri, char *value)
 void ptrie_free(ptrie *tri)
 {
 	array_free_full(tri, node_free_generic);
+}
+
+int ptrie_remove(ptrie *tri, char *pfx)
+{
+	size_t pfx_n, i, node_n, p_n;
+	array *parent_edges = tri;
+	struct match m;
+	struct node *nd;
+
+	/* validate input */
+	if (tri == NULL || pfx == NULL) {
+		return YNOT_EINVALIDPARAM;
+	}
+
+	pfx_n = strlen(pfx);
+	if (pfx_n == 0) {
+		return YNOT_EINVALIDPARAM;
+	}
+
+	/* find the exact node in question */
+	p_n = array_len(tri);
+	for (i = 0; i < p_n; i++) {
+		struct node *nd = array_get(tri, i);
+		m = node_contains_exact(NULL, nd, pfx, pfx_n);
+		if (m.node != NULL) {
+			parent_edges = (m.parent == NULL ? tri : m.parent->edges);
+			p_n = array_len(parent_edges);
+			break;
+		}
+	}
+
+	/* if not found, we're done */
+	if (m.node == NULL) {
+		return YNOT_OK;
+	}
+
+	/* adjust our immediate relatives */
+	node_n = array_len(m.node->edges);
+	switch (node_n) {
+	case 0:
+		/* If we don't have children, remove ourselves from our
+		 * parent */
+		for (i = 0; i < p_n; i++) {
+			nd = array_get(parent_edges, i);
+			if (nd == m.node) {
+				node_free(array_remove_at(parent_edges, i));
+				break;
+			}
+		}
+
+		/* If the parent is not the root node, not terminating, and
+		 * only has one other child: merge that child into it */
+		if (m.parent != NULL && !m.parent->is_terminating) {
+			if (array_len(parent_edges) == 1) {
+				struct node *sibling = array_get(m.parent->edges, 0);
+				return node_merge_with_child(m.parent, sibling);
+			}
+		}
+		break;
+	case 1:
+		/* If we have exactly one child, merge it into us */
+		nd = array_get(m.node->edges, 0);
+		return node_merge_with_child(m.node, nd);
+		break;
+	default:
+		/* if we have more than one child, just remove our
+		 * terminating flag */
+		m.node->is_terminating = 0;
+		break;
+	}
+
+	return YNOT_OK;
 }
