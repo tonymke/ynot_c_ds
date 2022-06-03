@@ -1,4 +1,4 @@
-AC_INIT([ynot_c_ds],[0.1.0],[tony@tony-lechner.com])
+AC_INIT([ynot_c_ds],[0.1.1],[tony@tony-lechner.com])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 AC_CONFIG_MACRO_DIRS([m4])
 
