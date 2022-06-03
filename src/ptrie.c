@@ -200,7 +200,8 @@ struct node *node_alloc(char *pfx, size_t pfx_n, int is_terminating)
 		free(nd);
 		return NULL;
 	}
-	strcpy(nd->prefix, pfx);
+	nd->prefix[pfx_n] = '\0';
+	strncpy(nd->prefix, pfx, pfx_n);
 
 	nd->edges = array_alloc();
 	if (nd->edges == NULL) {
@@ -331,8 +332,10 @@ int node_merge_with_child(struct node *parent, struct node *child)
 			return YNOT_ENOMEM;
 		}
 	}
-	strcpy(buf, parent->prefix);
-	strcat(buf, child->prefix);
+	strncpy(buf, parent->prefix, parent->prefix_len);
+	strncpy(&buf[parent->prefix_len], child->prefix, child->prefix_len);
+	buf[parent->prefix_len + child->prefix_len] = '\0';
+
 	free(parent->prefix);
 	parent->prefix = buf;
 	parent->prefix_len += child->prefix_len;
@@ -346,11 +349,9 @@ int node_merge_with_child(struct node *parent, struct node *child)
 		}
 	}
 
-	/* Add grandchildren children into parent's edge's array */
-	while (array_len(child->edges) > 0) {
-		struct node *grandchild = array_get(child->edges, 0);
-		array_remove_at(child->edges, 0);
-		array_add(parent->edges, grandchild);
+	/* Add grandchildren into parent's edge's array */
+	for (i = array_len(child->edges) - 1; i < SIZE_MAX; i--) {
+		array_add(parent->edges, array_remove_at(child->edges, i));
 	}
 	node_free(child);
 
