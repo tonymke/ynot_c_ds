@@ -54,7 +54,7 @@ map *map_alloc_capacity(size_t (*hash_fn)(void* key),
 		return NULL;
 	}
 
-	mp = malloc(sizeof(*mp));
+	mp = ynot_malloc(1, sizeof(*mp));
 	if (mp == NULL) {
 		perror("map_alloc_capacity: map malloc");
 		return NULL;
@@ -110,7 +110,7 @@ int map_ensure_capacity(map *mp, size_t min_capacity) {
 	}
 
 	/* alloc and zero a new buckets array */
-	new_buckets = malloc(sizeof(*new_buckets) * new_capacity);
+	new_buckets = ynot_malloc(new_capacity, sizeof(*new_buckets));
 	if (new_buckets == NULL) {
 		perror("map_ensure_capacity: new_buckets malloc");
 		return YNOT_ENOMEM;
@@ -302,7 +302,7 @@ void *map_set(map *mp, void *key, void *value)
 		return old_value;
 	}
 
-	kvp = malloc(sizeof(*kvp));
+	kvp = ynot_malloc(1, sizeof(*kvp));
 	if (kvp == NULL) {
 		perror("map_set: kvp malloc\n");
 		return NULL;

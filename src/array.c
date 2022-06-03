@@ -24,7 +24,7 @@ array *array_alloc_capacity(size_t initial_capacity)
 {
 	static const array new_array = { 0, 0, NULL };
 	array *arr;
-	arr = malloc(sizeof(*arr));
+	arr = ynot_malloc(1, sizeof(*arr));
 	if (arr == NULL) {
 		perror("array_alloc_capacity: struct malloc");
 		return NULL;
@@ -34,7 +34,7 @@ array *array_alloc_capacity(size_t initial_capacity)
 
 	if (initial_capacity > 0) {
 		arr->capacity = initial_capacity;
-		arr->data = malloc(sizeof(*arr->data) * initial_capacity);
+		arr->data = ynot_malloc(initial_capacity, sizeof(*arr->data));
 		if (arr->data == NULL) {
 			perror("array_alloc_capacity: array malloc");
 			free(arr);
@@ -67,9 +67,10 @@ int array_ensure_capacity(array *arr, size_t min_capacity)
 	}
 
 	min_capacity = next_power_of_2(min_capacity);
-	new_data = realloc(
+	new_data = ynot_realloc(
 		arr->data,
-		sizeof(*arr->data) * min_capacity
+		min_capacity,
+		sizeof(*arr->data)
 	);
 	if (new_data == NULL) {
 		perror("array_ensure_capacity: realloc");
@@ -223,9 +224,10 @@ int array_trim_capacity(array *arr)
 		return YNOT_OK;
 	}
 
-	new_data = realloc(
+	new_data = ynot_realloc(
 		arr->data,
-		sizeof(*arr->data) * arr->len
+		arr->len,
+		sizeof(*arr->data)
 	);
 	if (new_data == NULL) {
 		perror("array_trim_capacity: realloc");

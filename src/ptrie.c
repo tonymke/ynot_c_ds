@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "common.h"
 #include "ynot_c_ds.h"
 
 struct node;
@@ -143,7 +144,13 @@ struct node *node_add(struct node *nd, char *pfx, size_t pfx_n)
 
 	/* shorten ourselves if necessary */
 	if (match_n < nd->prefix_len) {
-		char *buf = realloc(nd->prefix, match_n + 1);
+		char *buf;
+		if (1 > SIZE_MAX - match_n) {
+			fprintf(stderr,
+				"node_add: parent shorten realloc: overflow\n");
+			return NULL;
+		}
+		buf = ynot_realloc(nd->prefix, 1, match_n + 1);
 		if (buf == NULL) {
 			perror("node_add: parent shorten realloc");
 			return NULL;
@@ -179,7 +186,7 @@ struct node *node_alloc(char *pfx, size_t pfx_n, int is_terminating)
 		}
 	}
 
-	nd = malloc(sizeof(*nd));
+	nd = ynot_malloc(1, sizeof(*nd));
 	if (nd == NULL) {
 		perror("node_alloc: node malloc");
 		return NULL;
@@ -187,7 +194,7 @@ struct node *node_alloc(char *pfx, size_t pfx_n, int is_terminating)
 	nd->prefix_len = pfx_n;
 	nd->is_terminating = is_terminating;
 
-	nd->prefix = malloc(sizeof(*nd->prefix) * pfx_n + 1);
+	nd->prefix = ynot_malloc(pfx_n + 1, sizeof(*nd->prefix));
 	if (nd->prefix == NULL) {
 		perror("node_alloc: prefix malloc");
 		free(nd);
@@ -300,11 +307,24 @@ int node_merge_with_child(struct node *parent, struct node *child)
 		return YNOT_EINVALIDPARAM;
 	}
 
-	buf = malloc(sizeof(*buf)
-			* (parent->prefix_len + child->prefix_len + 1));
-	if (buf == NULL) {
-		perror("node_merge_with_child: buf malloc");
-		return YNOT_ENOMEM;
+	{
+		/* prevent an overflow */
+		size_t tot = parent->prefix_len;
+		if (child->prefix_len > SIZE_MAX - tot) {
+			fprintf(stderr, "node_merge_with_child: overflow\n");
+			return YNOT_ENOMEM;
+		}
+		tot += child->prefix_len;
+		if (1 > SIZE_MAX - tot) {
+			fprintf(stderr, "node_merge_with_child: overflow\n");
+			return YNOT_ENOMEM;
+		}
+		tot += 1;
+		buf = ynot_malloc(1, tot);
+		if (buf == NULL) {
+			perror("node_merge_with_child: buf malloc");
+			return YNOT_ENOMEM;
+		}
 	}
 	strcpy(buf, parent->prefix);
 	strcat(buf, child->prefix);

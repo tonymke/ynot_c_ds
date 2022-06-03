@@ -1,6 +1,11 @@
+#include <errno.h>
+#include <stdio.h>
 #include <string.h>
 
+#include "common.h"
 #include "ynot_c_ds.h"
+
+static int will_overflow(size_t nmem, size_t n);
 
 size_t hash_str_djb2(void *key)
 {
@@ -65,4 +70,33 @@ int str_eq(void *a, void *b)
 	}
 
 	return !strcmp(a, b);
+}
+
+int will_overflow(size_t nmem, size_t n)
+{
+	if (n == 0 || nmem == 0) {
+		return 0;
+	}
+
+	return nmem > SIZE_MAX / n;
+}
+
+void *ynot_malloc(size_t nmem, size_t n)
+{
+	if (will_overflow(nmem, n)) {
+		errno = ENOMEM;
+		return NULL;
+	}
+
+	return malloc(nmem*n);
+}
+
+void *ynot_realloc(void *ptr, size_t nmem, size_t n)
+{
+	if (will_overflow(nmem, n)) {
+		errno = ENOMEM;
+		return NULL;
+	}
+
+	return realloc(ptr, nmem*n);
 }

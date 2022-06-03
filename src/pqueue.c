@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "common.h"
 #include "ynot_c_ds.h"
 
 struct pqueue_node {
@@ -134,7 +135,7 @@ int pqueue_push(pqueue *pq, int priority, void *val)
 
 	/* alloc a new node and place it and the end of the array */
 	{
-		struct pqueue_node *node = malloc(sizeof(*node));
+		struct pqueue_node *node = ynot_malloc(1, sizeof(*node));
 		if (node == NULL) {
 			perror("pqueue_push: node malloc");
 			return YNOT_ENOMEM;

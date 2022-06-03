@@ -3,12 +3,13 @@
 #include <check.h>
 
 #include "check_ynot_c_ds.h"
+#include "common.h"
 #include "ynot_c_ds.h"
 
 START_TEST(test_alloc_free)
 {
 	pqueue *pq = NULL;
-	char *input = malloc(sizeof(*input));
+	char *input = ynot_malloc(1, sizeof(*input));
 	ck_assert_ptr_nonnull(input);
 	*input = 'a';
 

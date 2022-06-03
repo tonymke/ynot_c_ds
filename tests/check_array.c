@@ -3,6 +3,7 @@
 #include <check.h>
 
 #include "check_ynot_c_ds.h"
+#include "common.h"
 #include "ynot_c_ds.h"
 
 START_TEST(test_add_insert)
@@ -47,7 +48,7 @@ START_TEST(test_alloc_free)
 	array *lst;
 
 	a = 'a';
-	b = malloc(sizeof(*b));
+	b = ynot_malloc(1, sizeof(*b));
 	ck_assert_ptr_nonnull(b);
 	*b = 'b';
 

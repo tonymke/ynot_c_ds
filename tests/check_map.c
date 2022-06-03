@@ -3,6 +3,7 @@
 #include <check.h>
 
 #include "check_ynot_c_ds.h"
+#include "common.h"
 #include "ynot_c_ds.h"
 
 static size_t phony_hash(void *size_t_val)
@@ -37,9 +38,9 @@ START_TEST(test_automatic_capacity_adjustment)
 	mp = map_alloc_capacity(phony_hash, sizet_ptr_eq, 256);
 	ck_assert_ptr_nonnull(mp);
 
-	keys = malloc(sizeof(*keys) * input_len);
+	keys = ynot_malloc(input_len, sizeof(*keys));
 	ck_assert_ptr_nonnull(keys);
-	values = malloc(sizeof(*values) * input_len);
+	values = ynot_malloc(input_len, sizeof(*values));
 	ck_assert_ptr_nonnull(values);
 	for (i = 0; i < input_len; i++) {
 		keys[i] = i;
@@ -62,8 +63,8 @@ START_TEST(test_get_set_remove)
 	map *mp;
 	char *key, *val;
 	void *buf;
-	key = malloc(sizeof(*key) * 32);
-	val = malloc(sizeof(*key) * 32);
+	key = ynot_malloc(32, sizeof(*key));
+	val = ynot_malloc(32, sizeof(*key));
 	strcpy(key, "a key");
 	strcpy(val, "a val");
 

@@ -3,6 +3,7 @@
 #include <check.h>
 
 #include "check_ynot_c_ds.h"
+#include "common.h"
 #include "ynot_c_ds.h"
 
 START_TEST(test_alloc_free)
@@ -10,11 +11,11 @@ START_TEST(test_alloc_free)
 	char *a, *b;
 	queue *q;
 
-	a = malloc(sizeof(*a));
+	a = ynot_malloc(1, sizeof(*a));
 	ck_assert_ptr_nonnull(a);
 	*a = 'a';
 
-	b = malloc(sizeof(*b));
+	b = ynot_malloc(1, sizeof(*b));
 	ck_assert_ptr_nonnull(b);
 	*b = 'b';
 
@@ -40,11 +41,11 @@ START_TEST(test_insert)
 	queue *q;
 	int *a, *b, ok;
 
-	a = malloc(sizeof(*a));
+	a = ynot_malloc(1, sizeof(*a));
 	ck_assert_ptr_nonnull(a);
 	*a = 4;
 
-	b = malloc(sizeof(*b));
+	b = ynot_malloc(1, sizeof(*b));
 	ck_assert_ptr_nonnull(b);
 	*b = 6;
 

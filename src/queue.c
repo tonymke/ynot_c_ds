@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "common.h"
 #include "ynot_c_ds.h"
 
 struct queue {
@@ -11,7 +12,7 @@ struct queue {
 
 queue *queue_alloc(size_t max_size, void (*free_value)(void *value))
 {
-	queue *q = malloc(sizeof(*q));
+	queue *q = ynot_malloc(1, sizeof(*q));
 	if (q == NULL) {
 		perror("queue_alloc: queue malloc");
 		return NULL;
@@ -22,7 +23,6 @@ queue *queue_alloc(size_t max_size, void (*free_value)(void *value))
 
 	q->lst = list_alloc();
 	if (q->lst == NULL) {
-		perror("queue_alloc: list malloc");
 		return NULL;
 	}
 

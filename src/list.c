@@ -17,7 +17,7 @@ list *list_alloc(void)
 	static const struct list new_value = { 0, NULL, NULL };
 
 	list *lst;
-	lst = malloc(sizeof(*lst));
+	lst = ynot_malloc(1, sizeof(*lst));
 	if (lst == NULL) {
 		perror("list_alloc: malloc");
 		return NULL;
@@ -144,7 +144,7 @@ struct list_node *list_node_alloc(void *value)
 	static const struct list_node new_value = { NULL, NULL, NULL };
 
 	struct list_node *node;
-	node = malloc(sizeof(*node));
+	node = ynot_malloc(1, sizeof(*node));
 	if (node == NULL) {
 		perror("list_node_alloc: malloc");
 		return NULL;
