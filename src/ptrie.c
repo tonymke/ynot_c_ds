@@ -181,7 +181,7 @@ struct node *node_alloc(char *pfx, size_t pfx_n, int is_terminating)
 
 	if (pfx_n == 0) {
 		pfx_n = strlen(pfx);
-		if (pfx_n == 0) {
+		if (pfx_n == 0 || pfx_n == SIZE_MAX) {
 			return NULL;
 		}
 	}
@@ -388,7 +388,7 @@ int ptrie_add(ptrie *tri, char *pfx)
 	}
 
 	pfx_n = strlen(pfx);
-	if (pfx_n == 0) {
+	if (pfx_n == 0 || pfx_n == SIZE_MAX) {
 		return YNOT_EINVALIDPARAM;
 	}
 
@@ -424,7 +424,7 @@ int ptrie_contains(ptrie *tri, char *value)
 	}
 
 	val_n = strlen(value);
-	if (val_n == 0) {
+	if (val_n == 0 || val_n == SIZE_MAX) {
 		return 0;
 	}
 
@@ -456,7 +456,7 @@ int ptrie_remove(ptrie *tri, char *pfx)
 	}
 
 	pfx_n = strlen(pfx);
-	if (pfx_n == 0) {
+	if (pfx_n == 0 || pfx_n == SIZE_MAX) {
 		return YNOT_EINVALIDPARAM;
 	}
 
