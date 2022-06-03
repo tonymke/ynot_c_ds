@@ -152,6 +152,7 @@ int map_ensure_capacity(map *mp, size_t min_capacity) {
 	/* free the old buckets array, update struct */
 	if (mp->buckets != NULL) {
 		free(mp->buckets);
+		mp->buckets = NULL;
 	}
 	mp->capacity = new_capacity;
 	mp->buckets = new_buckets;
@@ -179,12 +180,15 @@ void map_free_bucket_list_nodes (list *bucket,
 			if (free_key != NULL) {
 				free_key(map_node->key);
 			}
+			map_node->key = NULL;
 
 			if (free_value != NULL) {
 				free_value(map_node->value);
 			}
+			map_node->value = NULL;
 
 			free(map_node);
+			cur->value = NULL;
 		}
 		free(cur);
 		cur = next;
@@ -210,22 +214,26 @@ void map_free_full     (map *mp,
 
 			next = cur->next;
 			if (cur->value != NULL) {
-				struct map_kvp *map_node; map_node = (struct map_kvp *)(cur->value);
+				struct map_kvp *map_node = cur->value;
 				if (free_key != NULL) {
 					free_key(map_node->key);
 				}
+				map_node->key = NULL;
 
 				if (free_value != NULL) {
 					free_value(map_node->value);
 				}
+				map_node->value = NULL;
 
 				free(map_node);
+				cur->value = NULL;
 			}
 			free(cur);
 			cur = next;
 		}
 	}
 	free(mp->buckets);
+	mp->buckets = NULL;
 	free(mp);
 }
 

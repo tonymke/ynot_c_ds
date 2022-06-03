@@ -83,6 +83,7 @@ void list_free_full(list *lst, void (*free_value)(void *value))
 		node = next_node;
 	}
 
+	lst->start = lst->end = NULL;
 	free(lst);
 }
 
@@ -160,6 +161,10 @@ void list_node_free(struct list_node *node, void (*free_value)(void *value))
 {
 	if (node != NULL && free_value != NULL) {
 		free_value(node->value);
+	}
+	if (node != NULL) {
+		node->value = NULL;
+		node->prev = node->next = NULL;
 	}
 
 	free(node);

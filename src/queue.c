@@ -23,6 +23,7 @@ queue *queue_alloc(size_t max_size, void (*free_value)(void *value))
 
 	q->lst = list_alloc();
 	if (q->lst == NULL) {
+		free(q);
 		return NULL;
 	}
 
@@ -62,6 +63,7 @@ void queue_free(queue *q)
 	}
 
 	list_free_full(q->lst, q->free_value_fn);
+	q->lst = NULL;
 	free(q);
 }
 

@@ -93,6 +93,7 @@ void array_free_full(array *arr, void (*free_value)(void *value))
 
 			for (i = 0; i < arr->len; i++) {
 				free_value(arr->data[i]);
+				arr->data[i] = NULL;
 			}
 		}
 		free(arr->data);

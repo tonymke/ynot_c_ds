@@ -205,6 +205,7 @@ struct node *node_alloc(char *pfx, size_t pfx_n, int is_terminating)
 	nd->edges = array_alloc();
 	if (nd->edges == NULL) {
 		free(nd->prefix);
+		nd->prefix = NULL;
 		free(nd);
 		return NULL;
 	}
@@ -291,7 +292,11 @@ void node_free(struct node *nd)
 	}
 
 	array_free_full(nd->edges, node_free_generic);
+	nd->edges = NULL;
+
 	free(nd->prefix);
+	nd->prefix = NULL;
+
 	free(nd);
 }
 

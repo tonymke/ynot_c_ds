@@ -42,7 +42,9 @@ void pqueue_free_full(pqueue *pq, void (*free_value)(void *value))
 		for (i = 0; i < len; i++) {
 			struct pqueue_node *node = (struct pqueue_node *)array_get(pq, i);
 			free_value(node->value);
+			node->value = NULL;
 			free(node);
+			array_set(pq, i, NULL);
 		}
 	}
 	array_free(pq);
@@ -71,6 +73,7 @@ void *pqueue_pop(pqueue *pq)
 	node = array_get(pq, 0);
 	popped_value = node->value;
 	free(node);
+	array_set(pq, 0, NULL);
 
 	array_swap(pq, 0, len - 1);
 	array_remove_at(pq, len - 1);
