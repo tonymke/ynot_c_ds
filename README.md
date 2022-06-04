@@ -6,9 +6,9 @@ Implemented in pure C90 ("ANSI C").
 
 This project uses the GNU build system ("Autotools"), and has been validated to
 work in the latest official releases of the following OSs as of this writing:
-Arch Linux, Debian, FreeBSD 13.1, macOS 12 (via Xtools' clang), OpenBSD 7.1,
-and Windows 11 (via [msys2](https://www.msys2.org/)'s
-[mingw-w64](https://www.mingw-w64.org/) environment).
+Arch Linux, Debian, FreeBSD 13.1, macOS 12, OpenBSD 7.1, and Windows 11 (via
+[msys2](https://www.msys2.org/)'s [mingw-w64](https://www.mingw-w64.org/)
+environment).
 
 ## Building and Testing
 
