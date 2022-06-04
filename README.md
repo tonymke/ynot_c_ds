@@ -1,33 +1,37 @@
 # ynot\_c\_ds
 
 A data structures library written in C written as a refresher on the language.
-
-Implemented in pure C90 ("ANSI C").
-
-This project uses the GNU build system ("Autotools"), and has been validated to
-work in the latest official releases of the following OSs as of this writing:
-Arch Linux, Debian, FreeBSD 13.1, macOS 12, OpenBSD 7.1, and Windows 11 (via
-[msys2](https://www.msys2.org/)'s [mingw-w64](https://www.mingw-w64.org/)
-environment).
+It is implemented in pure C90 ("ANSI C").
 
 ## Building and Testing
 
-If building from source control, you will need a POSIX environment and the
-autotools to generate a configure script via `autoreconf -fi`
-[[1]](https://www.gnu.org/software/autoconf/manual/autoconf-2.68/html_node/autoreconf-Invocation.html).
-Consult your operating system vendor for instructions on getting the autotools
-installed for your system.
+This project uses the GNU build system ("Autotools") and has been validated to
+work in the latest official releases of the following OSs as of this writing:
+Arch Linux, Debian, FreeBSD 13, macOS 12, OpenBSD 7, and Windows 11 (via
+[msys2](https://www.msys2.org/)'s [mingw-w64](https://www.mingw-w64.org/)
+environment).
+
+Download a source [release](https://github.com/tonymke/ynot_c_ds/releases),
+which ships with GNU build scripts.
 
 1. Configure your build environment with `./configure`
-	* see `./configure --help` for additional configuration options
+	* See `./configure --help` for additional configuration options
 	* The provided `./maintainer_configure` script configures the project with
-	  options suitable for hacking on the project (strict C90 conformance,
+	  options suitable for hacking on the source code (strict C90 conformance,
 	  enable all warnings, warnings as errors, etc).
 2. Compile the project with `make`
 3. Run the tests with `make check`
 4. Install the library with `make install`
 	* You will need permission to write to your configured prefix directory.
-      You probably want to `sudo make install`.
+      On most modern systems, you probably want to `sudo make install`.
+
+If building directly from source control, note that generated autotool scripts
+\- namely `configure` - are NOT committed. You will need the GNU autotools to
+generate them via `autoreconf -fi`
+[[1]](https://www.gnu.org/software/autoconf/manual/autoconf-2.68/html_node/autoreconf-Invocation.html).
+
+Consult your operating system vendor or system administrator for instructions
+on obtaining the autotools for your system.
 
 ## Data structures offered
 
